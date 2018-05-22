@@ -23,6 +23,9 @@ class AssetsServiceProvider extends ServiceProvider
 			base_path() . '/vendor/moment/moment' => public_path('components/moment'),
 			base_path() . '/vendor/pnikolov/bootbox' => public_path('components/bootbox'),
 			base_path() . '/vendor/twbs/bootstrap' => public_path('components/bootstrap'),
+			base_path() . '/vendor/FezVrasta/popper' => public_path('components/popper'),
+			base_path() . '/vendor/almasaeed2010/AdminLTE' => public_path('components/adminlte'),
+			base_path() . '/vendor/FortAwesome/Font-Awesome' => public_path('components/fortawesome'),
 		],'app_assets');
 	}
 
