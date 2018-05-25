@@ -26,6 +26,8 @@ class AssetsServiceProvider extends ServiceProvider
 			base_path() . '/vendor/FezVrasta/popper' => public_path('components/popper'),
 			base_path() . '/vendor/almasaeed2010/AdminLTE' => public_path('components/adminlte'),
 			base_path() . '/vendor/FortAwesome/Font-Awesome' => public_path('components/fortawesome'),
+			base_path() . '/vendor/rochal/jQuery-slimScroll' => public_path('components/slimScroll'),
+			base_path() . '/vendor/ftlabs/fastclick' => public_path('components/fastclick'),
 		],'app_assets');
 	}
 

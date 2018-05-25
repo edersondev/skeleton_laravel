@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e14f7881e90f1c01ba8c1191ee6c141",
+    "content-hash": "f00abc145b7e559bd75a1308d41ce6d5",
     "packages": [
         {
             "name": "FezVrasta/popper",
@@ -665,6 +665,16 @@
             "time": "2018-02-07T20:20:57+00:00"
         },
         {
+            "name": "ftlabs/fastclick",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ftlabs/fastclick",
+                "reference": "9977a91"
+            },
+            "type": "library"
+        },
+        {
             "name": "igorescobar/jquery-mask-plugin",
             "version": "v1.14.1",
             "source": {
@@ -838,16 +848,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.6.22",
+            "version": "v5.6.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "637fd797a6dde8d24a9f07da77e375ec251c5d24"
+                "reference": "f547f0a71a12763d1adb8493237d541c9e3a5d10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/637fd797a6dde8d24a9f07da77e375ec251c5d24",
-                "reference": "637fd797a6dde8d24a9f07da77e375ec251c5d24",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f547f0a71a12763d1adb8493237d541c9e3a5d10",
+                "reference": "f547f0a71a12763d1adb8493237d541c9e3a5d10",
                 "shasum": ""
             },
             "require": {
@@ -973,7 +983,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-05-15T13:34:20+00:00"
+            "time": "2018-05-22T14:55:57+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -1862,6 +1872,16 @@
             ],
             "description": "Allows installation of Components via Composer.",
             "time": "2015-08-10T12:35:38+00:00"
+        },
+        {
+            "name": "rochal/jQuery-slimScroll",
+            "version": "1.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rochal/jQuery-slimScroll",
+                "reference": "cf39d36"
+            },
+            "type": "library"
         },
         {
             "name": "swiftmailer/swiftmailer",
