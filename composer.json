@@ -21,11 +21,11 @@
             "type":"package",
             "package":{
                 "name":"almasaeed2010/AdminLTE",
-                "version":"3.0.0-alpha",
+                "version":"3.0.0-alpha-2",
                 "source":{
                     "url":"https://github.com/almasaeed2010/AdminLTE",
                     "type":"git",
-                    "reference":"65f370e"
+                    "reference":"7bf4139"
                 }
             }
         },
@@ -69,7 +69,7 @@
     "require": {
         "php": "^7.1.3",
         "FezVrasta/popper": "1.14.3",
-        "almasaeed2010/AdminLTE": "3.0.0-alpha",
+        "almasaeed2010/AdminLTE": "3.0.0-alpha-2",
         "ckeditor/ckeditor": "^4.9",
         "components/chosen": "^1.8",
         "datatables/datatables": "^1.10",

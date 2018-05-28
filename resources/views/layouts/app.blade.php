@@ -3,7 +3,8 @@
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -55,14 +56,14 @@
           <!-- Messages Dropdown Menu -->
           <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
-              <i class="fa fa-comments-o"></i>
+              <i class="far fa-comments"></i>
               <span class="badge badge-danger navbar-badge">3</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
               <a href="#" class="dropdown-item">
                 <!-- Message Start -->
                 <div class="media">
-                  <img src="../../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                  <img src="{{ URL::asset('components/adminlte/dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                   <div class="media-body">
                     <h3 class="dropdown-item-title">
                       Brad Diesel
@@ -78,7 +79,7 @@
               <a href="#" class="dropdown-item">
                 <!-- Message Start -->
                 <div class="media">
-                  <img src="../../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                  <img src="{{ URL::asset('components/adminlte/dist/img/user8-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
                   <div class="media-body">
                     <h3 class="dropdown-item-title">
                       John Pierce
@@ -94,7 +95,7 @@
               <a href="#" class="dropdown-item">
                 <!-- Message Start -->
                 <div class="media">
-                  <img src="../../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                  <img src="{{ URL::asset('components/adminlte/dist/img/user3-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
                   <div class="media-body">
                     <h3 class="dropdown-item-title">
                       Nora Silvester
@@ -113,7 +114,7 @@
           <!-- Notifications Dropdown Menu -->
           <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
-              <i class="fa fa-bell-o"></i>
+              <i class="far fa-bell"></i>
               <span class="badge badge-warning navbar-badge">15</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -150,7 +151,7 @@
       <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="../../index3.html" class="brand-link">
-          <img src="../../dist/img/AdminLTELogo.png"
+          <img src="{{ URL::asset('components/adminlte/dist/img/AdminLTELogo.png') }}"
               alt="AdminLTE Logo"
               class="brand-image img-circle elevation-3"
               style="opacity: .8">
@@ -162,7 +163,7 @@
           <!-- Sidebar user (optional) -->
           <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-              <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+              <img src="{{ URL::asset('components/adminlte/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
               <a href="#" class="d-block">Alexander Pierce</a>
@@ -176,7 +177,7 @@
                   with font-awesome or any other icon font library -->
               <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon fa fa-dashboard"></i>
+                  <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>
                     Dashboard
                     <i class="right fa fa-angle-left"></i>
@@ -185,19 +186,19 @@
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="../../index.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Dashboard v1</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../../index2.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Dashboard v2</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../../index3.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Dashboard v3</p>
                     </a>
                   </li>
@@ -214,7 +215,7 @@
               </li>
               <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon fa fa-pie-chart"></i>
+                  <i class="nav-icon fas fa-chart-pie"></i>
                   <p>
                     Charts
                     <i class="right fa fa-angle-left"></i>
@@ -223,19 +224,19 @@
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="../charts/chartjs.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>ChartJS</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../charts/flot.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Flot</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../charts/inline.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Inline</p>
                     </a>
                   </li>
@@ -252,25 +253,25 @@
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="../UI/general.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>General</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../UI/icons.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Icons</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../UI/buttons.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Buttons</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../UI/sliders.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Sliders</p>
                     </a>
                   </li>
@@ -287,19 +288,19 @@
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="../forms/general.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>General Elements</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../forms/advanced.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Advanced Elements</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../forms/editors.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Editors</p>
                     </a>
                   </li>
@@ -316,13 +317,13 @@
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="../tables/simple.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Simple Tables</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../tables/data.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Data Tables</p>
                     </a>
                   </li>
@@ -340,7 +341,7 @@
               </li>
               <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon fa fa-envelope-o"></i>
+                  <i class="nav-icon far fa-envelope"></i>
                   <p>
                     Mailbox
                     <i class="fa fa-angle-left right"></i>
@@ -349,19 +350,19 @@
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="../mailbox/mailbox.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Inbox</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../mailbox/compose.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Compose</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../mailbox/read-mail.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Read</p>
                     </a>
                   </li>
@@ -378,31 +379,31 @@
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="../examples/invoice.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Invoice</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../examples/profile.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Profile</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../examples/login.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Login</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../examples/register.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Register</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../examples/lockscreen.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Lockscreen</p>
                     </a>
                   </li>
@@ -410,7 +411,7 @@
               </li>
               <li class="nav-item has-treeview menu-open">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon fa fa-plus-square-o"></i>
+                  <i class="nav-icon far fa-plus-square"></i>
                   <p>
                     Extras
                     <i class="fa fa-angle-left right"></i>
@@ -419,25 +420,25 @@
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="../examples/404.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Error 404</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../examples/500.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Error 500</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../examples/blank.html" class="nav-link active">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Blank Page</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="../../starter.html" class="nav-link">
-                      <i class="fa fa-circle-o nav-icon"></i>
+                      <i class="far fa-circle nav-icon"></i>
                       <p>Starter Page</p>
                     </a>
                   </li>
@@ -453,19 +454,19 @@
               <li class="nav-header">LABELS</li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon fa fa-circle-o text-danger"></i>
+                  <i class="nav-icon far fa-circle text-danger"></i>
                   <p class="text">Important</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon fa fa-circle-o text-warning"></i>
+                  <i class="nav-icon far fa-circle text-warning"></i>
                   <p>Warning</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon fa fa-circle-o text-info"></i>
+                  <i class="nav-icon far fa-circle text-info"></i>
                   <p>Informational</p>
                 </a>
               </li>
@@ -556,6 +557,8 @@
     <script src="{{ URL::asset('components/fastclick/lib/fastclick.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ URL::asset('components/adminlte/dist/js/adminlte.min.js') }}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{{ URL::asset('components/adminlte/dist/js/demo.js') }}"></script>
     @stack('js')
 
   </body>
