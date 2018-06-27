@@ -1,0 +1,7 @@
+.login-box .custom-control-label{
+  position: static;
+}
+
+.login-box .custom-checkbox{
+  margin-top: 8px;
+}
