@@ -5,3 +5,7 @@
 .login-box .custom-checkbox{
   margin-top: 8px;
 }
+
+.asteriskField{
+  color: red;
+}

@@ -162,6 +162,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\SidebarServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
+        App\Providers\FormServiceProvider::class,
 
     ],
 
