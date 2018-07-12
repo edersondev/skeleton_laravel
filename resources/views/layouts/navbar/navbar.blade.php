@@ -11,6 +11,8 @@
     @include('layouts.navbar.messages')
 
     @include('layouts.navbar.notifications')
+
+    @include('layouts.navbar.profile')
     
     <li class="nav-item">
       <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
