@@ -164,6 +164,7 @@ return [
         App\Providers\SidebarServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         App\Providers\FormServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
 
     ],
 
