@@ -31,13 +31,18 @@ class SidebarServiceProvider extends ServiceProvider
             'icon-right' => $this->iconRightSidebar('span','right badge badge-danger','New')
           ],
           [
+            'routeName' => 'users.index',
+            'title' => 'Usuários',
+            'icon-left' => 'nav-icon fa fa-users'
+          ],
+          [
             'routeName' => '',
             'title' => 'Charts',
             'icon-left' => 'nav-icon fas fa-chart-pie',
             'icon-right' => $this->iconRightSidebar(),
             'children' => [
               [
-                'routeName' => 'default',
+                'routeName' => 'users.index',
                 'title' => 'ChartJs',
                 'icon-left' => 'far fa-circle nav-icon',
               ]

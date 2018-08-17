@@ -4,7 +4,7 @@
   </a>
 
   <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-    <a href="#" class="dropdown-item">
+    <a href="{{ route('users.edit',auth()->user()->id) }}" class="dropdown-item">
       <i class="fas fa-address-card"></i> Perfil
     </a>
     <div class="dropdown-divider"></div>
