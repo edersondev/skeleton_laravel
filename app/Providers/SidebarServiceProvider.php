@@ -48,9 +48,6 @@ class SidebarServiceProvider extends ServiceProvider
 
   public function buildItemMenu($routeName, $title, $icon_left = '', $icon_right = '', $children = null)
   {
-    if($routeName == 'users.index'){
-      return [];
-    }
     $item = [
       'routeName' => $routeName,
       'title' => $title,
