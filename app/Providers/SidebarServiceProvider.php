@@ -14,40 +14,17 @@ class SidebarServiceProvider extends ServiceProvider
    */
   public function boot()
   {
+    $subItemChart = [
+      $this->buildItemMenu('roles.index','ChartJs','far fa-circle nav-icon')
+    ];
     $arrSidebar = [
       [
         'header' => '',
         'itens' => [
-          [
-            'routeName' => 'default',
-            'title' => 'Painel',
-            'icon-left' => 'nav-icon fas fa-tachometer-alt',
-            'icon-right' => ''
-          ],
-          [
-            'routeName' => 'default',
-            'title' => 'Widgets',
-            'icon-left' => 'nav-icon fa fa-th',
-            'icon-right' => $this->iconRightSidebar('span','right badge badge-danger','New')
-          ],
-          [
-            'routeName' => 'users.index',
-            'title' => 'Usuários',
-            'icon-left' => 'nav-icon fa fa-users'
-          ],
-          [
-            'routeName' => '',
-            'title' => 'Charts',
-            'icon-left' => 'nav-icon fas fa-chart-pie',
-            'icon-right' => $this->iconRightSidebar(),
-            'children' => [
-              [
-                'routeName' => 'users.index',
-                'title' => 'ChartJs',
-                'icon-left' => 'far fa-circle nav-icon',
-              ]
-            ]
-          ]
+          $this->buildItemMenu('default','Painel','nav-icon fas fa-tachometer-alt'),
+          $this->buildItemMenu('default','Widgets','nav-icon fa fa-th', $this->iconRightSidebar('span','right badge badge-danger','New')),
+          $this->buildItemMenu('users.index','Usuários','nav-icon fa fa-users'),
+          $this->buildItemMenu('default','Charts','nav-icon fas fa-chart-pie',$this->iconRightSidebar(),$subItemChart),
         ],
         
       ],
@@ -67,6 +44,25 @@ class SidebarServiceProvider extends ServiceProvider
       'class' => $class,
       'text' => $text
     ];
+  }
+
+  public function buildItemMenu($routeName, $title, $icon_left = '', $icon_right = '', $children = null)
+  {
+    if($routeName == 'users.index'){
+      return [];
+    }
+    $item = [
+      'routeName' => $routeName,
+      'title' => $title,
+      'icon-left' => $icon_left,
+      'icon-right' => $icon_right
+    ];
+
+    if(!is_null($children)){
+      $item['children'] = $children;
+    }
+
+    return $item;
   }
 
   /**

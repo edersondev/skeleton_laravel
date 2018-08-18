@@ -22,37 +22,41 @@
         @endif
 
         @foreach($sidebar['itens'] as $item)
-          <li class="nav-item{{ ( isset($item['children']) ? ' has-treeview' : '' ) }}">
-            <a href="{{ ( isset($item['children']) ? '#' : route($item['routeName']) ) }}" class="nav-link{{ ( $item['routeName'] == Route::currentRouteName() ? ' active' : '' ) }}">
-              @if(isset($item['icon-left']) and !empty($item['icon-left']))
-                <i class="{{ $item['icon-left'] }}"></i>
-              @endif
-              <p>
-                {{ $item['title'] }}
-                @if(isset($item['icon-right']) and !empty($item['icon-right']))
-                  <{{$item['icon-right']['tag']}} class="{{ $item['icon-right']['class'] }}">
-                    {{ $item['icon-right']['text'] }}
-                  </{{$item['icon-right']['tag']}}>
+          @if(count($item))
+            <li class="nav-item{{ ( isset($item['children']) ? ' has-treeview' : '' ) }}">
+              <a href="{{ ( isset($item['children']) ? '#' : route($item['routeName']) ) }}" class="nav-link{{ ( $item['routeName'] == Route::currentRouteName() ? ' active' : '' ) }}">
+                @if(isset($item['icon-left']) and !empty($item['icon-left']))
+                  <i class="{{ $item['icon-left'] }}"></i>
                 @endif
-              </p>
-            </a>
+                <p>
+                  {{ $item['title'] }}
+                  @if(isset($item['icon-right']) and !empty($item['icon-right']))
+                    <{{$item['icon-right']['tag']}} class="{{ $item['icon-right']['class'] }}">
+                      {{ $item['icon-right']['text'] }}
+                    </{{$item['icon-right']['tag']}}>
+                  @endif
+                </p>
+              </a>
 
-            @if(isset($item['children']))
-              <ul class="nav nav-treeview">
-                @foreach($item['children'] as $subitem)
-                  <li class="nav-item">
-                    <a href="{{ route($subitem['routeName']) }}" class="nav-link">
-                      @if(isset($subitem['icon-left']))
-                        <i class="{{ $subitem['icon-left'] }}"></i>
-                      @endif
-                      <p>{{ $subitem['title'] }}</p>
-                    </a>
-                  </li>
-                @endforeach
-              </ul>
-            @endif
+              @if(isset($item['children']))
+                <ul class="nav nav-treeview">
+                  @foreach($item['children'] as $subitem)
+                    @if(count($subitem))
+                      <li class="nav-item">
+                        <a href="{{ route($subitem['routeName']) }}" class="nav-link">
+                          @if(isset($subitem['icon-left']))
+                            <i class="{{ $subitem['icon-left'] }}"></i>
+                          @endif
+                          <p>{{ $subitem['title'] }}</p>
+                        </a>
+                      </li>
+                    @endif
+                  @endforeach
+                </ul>
+              @endif
 
-          </li>
+            </li>
+          @endif
         @endforeach
 
       @endforeach
