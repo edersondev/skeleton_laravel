@@ -19,7 +19,7 @@ Route::group(['middleware' => 'auth'], function() {
   })->name('default');
   Route::get('/home', 'HomeController@index')->name('home');
 
-  Route::resource('users', 'UserController');
+  Route::resource('usuarios', 'UsuarioController');
   Route::resource('roles', 'RoleController');
   Route::resource('permissions', 'PermissionController');
 });

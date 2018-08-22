@@ -9,7 +9,7 @@ class CreateTaModelPermissoesTable extends Migration {
 	{
 		Schema::create('ta_model_permissoes', function(Blueprint $table) {
 			$table->integer('co_permissao')->unsigned();
-			$table->string('ds_tipo_model');
+			$table->string('model_type');
 			$table->integer('co_usuario')->unsigned();
 		});
 	}

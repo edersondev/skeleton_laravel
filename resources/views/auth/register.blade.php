@@ -5,7 +5,7 @@
 <p class="login-box-msg">Cadastro</p>
 
 {{ Form::open(['route' => 'register']) }}
-	{{ Form::bsText('name','Nome',null,null,['required' => true,'autofocus' => true]) }}
+	{{ Form::bsText('ds_nome','Nome',null,null,['required' => true,'autofocus' => true]) }}
 	{{ Form::bsEmail('email','Email',null,null,['required' => true]) }}
 	{{ Form::bsPassword('password','Senha',null,['required' => true]) }}
 	{{ Form::bsPassword('password_confirmation','Confirmar Senha',null,['required' => true]) }}

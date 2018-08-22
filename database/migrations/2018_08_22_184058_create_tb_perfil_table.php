@@ -3,12 +3,12 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateTbPapelTable extends Migration {
+class CreateTbPerfilTable extends Migration {
 
 	public function up()
 	{
-		Schema::create('tb_papel', function(Blueprint $table) {
-			$table->increments('co_seq_papel');
+		Schema::create('tb_perfil', function(Blueprint $table) {
+			$table->increments('co_seq_perfil');
 			$table->string('ds_nome');
 			$table->string('ds_nome_guard');
 			$table->timestamp('dt_inclusao')->nullable();
@@ -18,6 +18,6 @@ class CreateTbPapelTable extends Migration {
 
 	public function down()
 	{
-		Schema::drop('tb_papel');
+		Schema::drop('tb_perfil');
 	}
 }

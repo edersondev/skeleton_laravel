@@ -23,7 +23,7 @@ class SidebarServiceProvider extends ServiceProvider
         'itens' => [
           $this->buildItemMenu('default','Painel','nav-icon fas fa-tachometer-alt'),
           //$this->buildItemMenu('default','Widgets','nav-icon fa fa-th', $this->iconRightSidebar('span','right badge badge-danger','New')),
-          $this->buildItemMenu('users.index','Usuários','nav-icon fa fa-users'),
+          $this->buildItemMenu('usuarios.index','Usuários','nav-icon fa fa-users'),
           //$this->buildItemMenu('default','Charts','nav-icon fas fa-chart-pie',$this->iconRightSidebar(),$subItemChart),
         ],
         

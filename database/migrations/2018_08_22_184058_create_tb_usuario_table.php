@@ -10,13 +10,13 @@ class CreateTbUsuarioTable extends Migration {
 		Schema::create('tb_usuario', function(Blueprint $table) {
 			$table->increments('co_seq_usuario');
 			$table->string('ds_nome');
-			$table->string('ds_email')->unique();
-			$table->string('ds_senha');
-			$table->boolean('st_ativo');
+			$table->string('email')->unique();
+			$table->string('password');
+			$table->boolean('st_ativo')->default(false);
 			$table->string('ds_relembrar_token', 100)->nullable();
 			$table->timestamp('dt_inclusao')->nullable();
 			$table->timestamp('dt_atualizacao')->nullable();
-			$table->softDeletes();
+			$table->timestamp('dt_exclusao')->nullable();
 		});
 	}
 

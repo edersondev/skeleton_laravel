@@ -25,7 +25,7 @@
         <div class="input-group-prepend">
           <div class="input-group-text"><i class="fas fa-key"></i></div>
         </div>
-        <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="Senha" required>
+        <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
         @if ($errors->has('password'))
           <div class="invalid-feedback" role="alert">
             <strong>{{ $errors->first('password') }}</strong>

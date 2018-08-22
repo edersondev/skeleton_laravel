@@ -4,8 +4,8 @@
   </a>
 
   <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-    <a href="{{ route('users.edit',auth()->user()->id) }}" class="dropdown-item">
-      <i class="fas fa-address-card"></i> Perfil
+    <a href="{{ route('usuarios.edit',auth()->user()->co_seq_usuario) }}" class="dropdown-item">
+      <i class="fas fa-address-card"></i> Editar Dados
     </a>
     <div class="dropdown-divider"></div>
     <a href="#" class="dropdown-item" onclick="event.preventDefault();document.getElementById('form-logout').submit();">
