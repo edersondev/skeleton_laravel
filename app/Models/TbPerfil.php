@@ -74,7 +74,9 @@ class TbPerfil extends Model implements RoleContract
     {
         return $this->belongsToMany(
             config('permission.models.permission'),
-            config('permission.table_names.role_has_permissions')
+            config('permission.table_names.role_has_permissions'),
+            'co_usuario',
+            'co_permissao'
         );
     }
 

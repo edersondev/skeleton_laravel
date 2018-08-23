@@ -1,48 +1,71 @@
 @extends('layouts.app')
 
+@section('title')
+	@if( Route::currentRouteName() === 'usuarios.create' )
+		<i class='fa fa-user-plus'></i> Adicionar Usuário
+	@else
+		<i class="fas fa-user-edit"></i> Editar Usuário
+	@endif
+@endsection
+
 @section('content')
 
-<div class='col-lg-4 col-lg-offset-4'>
+@if( Route::currentRouteName() === 'usuarios.create' )
+	{{ Form::open(['route' => 'usuarios.store']) }}
+@else
+	{{ Form::model($user, array('route' => array('usuarios.update', $user->co_seq_usuario), 'method' => 'PUT')) }}
+@endif
 
-    <h1><i class='fa fa-user-plus'></i> Add User</h1>
-    <hr>
+	<div class="card">
+		<div class="card-body">
 
-    {{ Form::open(array('url' => 'users')) }}
+			<div class="row">
+				<div class="col-md">
 
-    <div class="form-group">
-        {{ Form::label('name', 'Name') }}
-        {{ Form::text('name', '', array('class' => 'form-control')) }}
-    </div>
+						<div class="card">
+							<div class="card-header">
+								<i class="fas fa-address-card"></i> Dados do usuário
+							</div>
+							<div class="card-body">
+								{{ Form::bsText('ds_nome','Nome') }}
+								{{ Form::bsEmail('email','Email') }}
+								{{ Form::bsPassword('password','Senha') }}
+								{{ Form::bsPassword('password_confirmation',' Confirmar Senha') }}
+							</div>
+						</div>
 
-    <div class="form-group">
-        {{ Form::label('email', 'Email') }}
-        {{ Form::email('email', '', array('class' => 'form-control')) }}
-    </div>
+				</div>
+				<div class="col-md">
 
-    <div class='form-group'>
-        @foreach ($roles as $role)
-            {{ Form::checkbox('roles[]',  $role->id ) }}
-            {{ Form::label($role->name, ucfirst($role->name)) }}<br>
+					<div class="card">
+						<div class="card-header">
+							<i class="fas fa-key"></i> Atribuir Perfil
+						</div>
+						<div class="card-body">
+								@if(count($roles))
+									<div class='form-group'>
+										@foreach ($roles as $role)
+											{{ Form::checkbox('roles[]',  $role->id, $user->roles ) }}
+											{{ Form::label($role->name, ucfirst($role->name)) }}<br>
+										@endforeach
+									</div>
+								@else
+									<h5><b>Nenhum perfil cadastrado</b></h5>
+								@endif
+						</div>
+					</div>
 
-        @endforeach
-    </div>
+				</div>
+			</div>
 
-    <div class="form-group">
-        {{ Form::label('password', 'Password') }}<br>
-        {{ Form::password('password', array('class' => 'form-control')) }}
+		</div>
 
-    </div>
-
-    <div class="form-group">
-        {{ Form::label('password', 'Confirm Password') }}<br>
-        {{ Form::password('password_confirmation', array('class' => 'form-control')) }}
-
-    </div>
-
-    {{ Form::submit('Add', array('class' => 'btn btn-primary')) }}
-
-    {{ Form::close() }}
-
-</div>
+		<div class="card-footer">
+			@form_buttons(['routeCancel' => route('usuarios.index'),'routeName' => Route::currentRouteName()])
+			@endform_buttons
+		</div>
+		
+	</div>
+{{ Form::close() }}
 
 @endsection

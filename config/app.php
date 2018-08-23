@@ -165,6 +165,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         App\Providers\FormServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        App\Providers\HelperServiceProvider::class,
 
     ],
 

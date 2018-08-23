@@ -66,6 +66,9 @@
 
         <!-- Main content -->
         <section class="content">
+          
+          @include('layouts.alerts')
+
           @yield('content')
         </section>
         <!-- /.content -->

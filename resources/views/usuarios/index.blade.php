@@ -1,51 +1,64 @@
 @extends('layouts.app')
 
-@section('title','Lista de Usuários')
+@section('title')
+	<i class="fa fa-users"></i> Lista de Usuários
+@endsection
 
 @section('content')
 
-<div class="col-lg-10 col-lg-offset-1">
-    <h1><i class="fa fa-users"></i> User Administration <a href="{{ route('roles.index') }}" class="btn btn-default pull-right">Roles</a>
-    <a href="{{ route('permissions.index') }}" class="btn btn-default pull-right">Permissions</a></h1>
-    <hr>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
+<div class="row">
+	<div class="col-12">
 
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Date/Time Added</th>
-                    <th>User Roles</th>
-                    <th>Operations</th>
-                </tr>
-            </thead>
+		<div class="card">
+			<div class="card-header">
+				<div class="float-right">
+					<a href="{{ route('perfis.index') }}" class="btn btn-primary"><i class="fas fa-user-lock"></i> Perfis</a>
+					<a href="{{ route('permissoes.index') }}" class="btn btn-primary"><i class="fas fa-user-tag"></i> Permissões</a>
+				</div>
+			</div>
+			<div class="card-body">
 
-            <tbody>
-                @foreach ($users as $user)
-                <tr>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Date/Time Added</th>
+								<th>User Roles</th>
+								<th>Operations</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach ($users as $user)
+							<tr>
+								<td>{{ $user->ds_nome }}</td>
+								<td>{{ $user->email }}</td>
+								<td>{{ $user->dt_inclusao->format('F d, Y h:ia') }}</td>
+								<td>{{  $user->roles()->pluck('ds_nome')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
+								<td>
+								
+								{!! Form::open(['method' => 'DELETE', 'route' => ['usuarios.destroy', $user->co_seq_usuario] ]) !!}
+								<a href="{{ route('usuarios.edit', $user->co_seq_usuario) }}" class="btn btn-info" style="margin-right: 3px;">Edit</a>
+								{!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+								{!! Form::close() !!}
+			
+								</td>
+							</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
 
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->created_at->format('F d, Y h:ia') }}</td>
-                    <td>{{  $user->roles()->pluck('name')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
-                    <td>
-                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
+			</div>
+			<div class="card-footer">
+				<a href="{{ route('usuarios.create') }}" class="btn btn-success">
+					<i class="fas fa-user-plus"></i> Adicionar usuário
+				</a>
+			</div>
+		</div>
 
-                    {!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id] ]) !!}
-                    {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                    {!! Form::close() !!}
-
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-
-        </table>
-    </div>
-
-    <a href="{{ route('users.create') }}" class="btn btn-success">Add User</a>
-
+	</div>
 </div>
 
 @endsection

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Facades\Hash;
 
 class TbUsuario extends Authenticatable 
 {
@@ -86,6 +87,11 @@ class TbUsuario extends Authenticatable
             'co_usuario',
             'co_perfil'
         );
+    }
+
+    public function setPasswordAttribute($password)
+    {   
+        $this->attributes['password'] = Hash::make($password);
     }
 
     public function papeis()

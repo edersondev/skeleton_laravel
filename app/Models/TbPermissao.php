@@ -42,7 +42,7 @@ class TbPermissao extends Model implements PermissionContract
      */
     const UPDATED_AT = 'dt_atualizacao';
 
-    public $guarded = ['co_seq_permissao'];    
+    public $guarded = ['co_seq_permissao'];
 
     public function __construct(array $attributes = [])
     {
@@ -79,7 +79,9 @@ class TbPermissao extends Model implements PermissionContract
     {
         return $this->belongsToMany(
             config('permission.models.role'),
-            config('permission.table_names.role_has_permissions')
+            config('permission.table_names.role_has_permissions'),
+            'co_permissao',
+            'co_perfil'
         );
     }
 

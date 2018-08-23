@@ -6,22 +6,12 @@ use Illuminate\Http\Request;
 
 use App\Models\TbUsuario;
 use App\Models\TbPerfil;
-use Auth;
-use Illuminate\Support\Facades\Hash;
-
-//Importing laravel-permission models
-//use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-
-//Enables us to output flash messaging
-use Session;
 
 class UsuarioController extends Controller
 {
   public function __construct()
   {
-    //$this->middleware(['auth', 'isAdmin']); //isAdmin middleware lets only users with a //specific permission permission to access these resources
-    $this->middleware(['auth']);
+		//$this->middleware(['auth', 'isAdmin']); //isAdmin middleware lets only users with a //specific permission permission to access these resources
   }
 
   /**
@@ -31,9 +21,8 @@ class UsuarioController extends Controller
   */
   public function index()
   {
-    //Get all users and pass it to the view
-    $users = User::all(); 
-    return view('users.index')->with('users', $users);
+		$users = TbUsuario::all(); 
+		return view('usuarios.index')->with('users', $users);
   }
 
   /**
@@ -43,9 +32,8 @@ class UsuarioController extends Controller
   */
   public function create()
   {
-    //Get all roles and pass it to the view
-    $roles = Role::get();
-    return view('users.create', ['roles'=>$roles]);
+		$roles = TbPerfil::get();
+		return view('usuarios.create', ['roles'=>$roles]);
   }
 
   /**
@@ -56,28 +44,19 @@ class UsuarioController extends Controller
   */
   public function store(Request $request)
   {
-    //Validate name, email and password fields
-      $this->validate($request, [
-          'name'=>'required|max:120',
-          'email'=>'required|email|unique:users',
-          'password'=>'required|min:6|confirmed'
-      ]);
+	  $this->validateUsuario($request);
 
-      $user = User::create($request->only('email', 'name', 'password')); //Retrieving only the email and password data
+	  $user = TbUsuario::create($request->only('email', 'ds_nome', 'password'));
 
-      $roles = $request['roles']; //Retrieving the roles field
-    //Checking if a role was selected
-      if (isset($roles)) {
-
-          foreach ($roles as $role) {
-          $role_r = Role::where('id', '=', $role)->firstOrFail();            
-          $user->assignRole($role_r); //Assigning role to user
-          }
-      }        
-    //Redirect to the users.index view and display message
-      return redirect()->route('users.index')
-          ->with('flash_message',
-          'User successfully added.');
+	  $roles = $request['roles'];
+	  if (isset($roles)) {
+		  foreach ($roles as $role) {
+		  $role_r = TbPerfil::where('co_seq_perfil', '=', $role)->firstOrFail();            
+		  $user->assignRole($role_r);
+		  }
+	  }
+	  return redirect()->route('usuarios.index')
+		  ->with('success', trans('messages.store'));
   }
 
   /**
@@ -88,7 +67,7 @@ class UsuarioController extends Controller
   */
   public function show($id)
   {
-    return redirect('usuarios'); 
+		return redirect('usuarios');
   }
 
   /**
@@ -99,9 +78,9 @@ class UsuarioController extends Controller
   */
   public function edit($id)
   {
-    $user = TbUsuario::findOrFail($id);
-    $roles = TbPerfil::get();
-    return view('usuarios.edit', compact('user', 'roles'));
+		$user = TbUsuario::findOrFail($id);
+		$roles = TbPerfil::get();
+		return view('usuarios.create', compact('user', 'roles'));
   }
 
   /**
@@ -113,26 +92,23 @@ class UsuarioController extends Controller
   */
   public function update(Request $request, $id)
   {
-    $user = TbUsuario::findOrFail($id); //Get role specified by id
+		$user = TbUsuario::findOrFail($id);
 
-    $this->validate($request, [
-      'ds_nome'=>'required|max:120',
-      'email'=>"required|email|unique:tb_usuario,email,{$id},co_seq_usuario",
-      'password'=>'required|min:6|confirmed'
-    ]);
-    $input = $request->only(['ds_nome', 'email', 'password']);
-    $roles = $request['roles'];
-    $input['password'] = Hash::make($input['password']);
-    $user->fill($input)->save();
+		$this->validateUsuario($request,true,$id);
 
-    if (isset($roles)) {
-      $user->roles()->sync($roles);
-    } else {
-      $user->roles()->detach();
-    }
-    return redirect()->route('usuarios.index')
-      ->with('flash_message', 'User successfully edited.');
-  }
+		$input = $request->only(['ds_nome', 'email', 'password']);
+		$roles = $request['roles'];
+		$user->fill($input)->save();
+
+		if (isset($roles)) {
+			$user->roles()->sync($roles);
+		} else {
+			$user->roles()->detach();
+		}
+		
+		return redirect()->route('usuarios.index')
+			->with('success', trans('messages.update'));
+	}
 
   /**
   * Remove the specified resource from storage.
@@ -142,12 +118,27 @@ class UsuarioController extends Controller
   */
   public function destroy($id)
   {
-    //Find a user with a given id and delete
-      $user = User::findOrFail($id); 
-      $user->delete();
+		if(auth()->user()->co_seq_usuario == $id){
+			return redirect()->route('usuarios.index')
+				->with('warning', 'Não é possível excluir usuário logado no sistema.');
+		}
+	  $user = TbUsuario::findOrFail($id); 
+	  $user->delete();
 
-      return redirect()->route('users.index')
-          ->with('flash_message',
-          'User successfully deleted.');
+		return redirect()->route('usuarios.index')
+			->with('success', trans('messages.destroy'));
   }
+
+	private function validateUsuario($request, $update = false, $id = null)
+	{
+		$rules = [
+			'ds_nome'=>'required|max:120',
+		  'email'=>'required|email|unique:tb_usuario',
+		  'password'=>'required|min:6|confirmed'
+		];
+		if($update){
+			$rules['email'] = "required|email|unique:tb_usuario,email,{$id},co_seq_usuario";
+		}
+		$this->validate($request, $rules);
+	}
 }
