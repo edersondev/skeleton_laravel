@@ -10,7 +10,7 @@ class CreateTaModelPerfisTable extends Migration {
 		Schema::create('ta_model_perfis', function(Blueprint $table) {
 			$table->integer('co_perfil')->unsigned();
 			$table->string('model_type');
-			$table->integer('co_usuario')->unsigned();
+			$table->integer('model_id')->unsigned();
 		});
 	}
 

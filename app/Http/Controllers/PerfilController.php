@@ -4,13 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Auth;
-//Importing laravel-permission models
-
 use App\Models\TbPerfil;
 use App\Models\TbPermissao;
-
-use Session;
+use DB;
 
 class PerfilController extends Controller {
 
@@ -48,31 +44,34 @@ class PerfilController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
-	//Validate name and permissions field
+	
 		$this->validate($request, [
-			'ds_nome'=>'required|unique:roles|max:10',
+			'ds_nome'=>'required|unique:tb_perfil|max:10',
 			'permissions' =>'required',
 			]
 		);
 
-		$name = $request['name'];
-		$role = new Role();
-		$role->name = $name;
+		DB::beginTransaction();
+		try{
+			$role = new TbPerfil();
+			$role->ds_nome = $request['ds_nome'];
+			$role->save();
 
-		$permissions = $request['permissions'];
-
-		$role->save();
-	//Looping thru selected permissions
-		foreach ($permissions as $permission) {
-			$p = Permission::where('id', '=', $permission)->firstOrFail(); 
-		 //Fetch the newly created role and assign permission
-			$role = Role::where('name', '=', $name)->first(); 
-			$role->givePermissionTo($p);
+			$permissions = $request['permissions'];
+			foreach ($permissions as $permission) {
+				$p = TbPermissao::where('co_seq_permissao', '=', $permission)->firstOrFail(); 
+				$role = TbPerfil::where('ds_nome', '=', $request['ds_nome'])->first(); 
+				$role->givePermissionTo($p);
+			}
+			DB::commit();
+			return redirect()->route('perfis.index')->with('success',trans('messages.store'));
+		} catch(\Exception $e) {
+			DB::rollBack();
+			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
+			return redirect()->back()
+				->with('danger',$message)
+				->withInput();
 		}
-
-		return redirect()->route('roles.index')
-			->with('flash_message',
-			 'Role'. $role->name.' added!'); 
 	}
 
 	/**
@@ -82,7 +81,7 @@ class PerfilController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id) {
-		return redirect('roles');
+		return redirect('perfis');
 	}
 
 	/**
@@ -92,10 +91,10 @@ class PerfilController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit($id) {
-		$role = Role::findOrFail($id);
-		$permissions = Permission::all();
-
-		return view('roles.edit', compact('role', 'permissions'));
+		$role = TbPerfil::findOrFail($id);
+		$permissions = TbPermissao::all();
+		$perfil_permissoes = $role->permissions()->pluck('co_permissao')->toarray();
+		return view('perfis.create', compact('role', 'permissions','perfil_permissoes'));
 	}
 
 	/**
@@ -105,33 +104,37 @@ class PerfilController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id) {
-
-		$role = Role::findOrFail($id);//Get role with the given id
-	//Validate name and permission fields
+	public function update(Request $request, $id)
+	{
 		$this->validate($request, [
-			'name'=>'required|max:10|unique:roles,name,'.$id,
+			"ds_nome'=>'required|max:10|unique:tb_perfil,ds_nome,{$id},co_seq_perfil",
 			'permissions' =>'required',
 		]);
 
-		$input = $request->except(['permissions']);
-		$permissions = $request['permissions'];
-		$role->fill($input)->save();
+		DB::beginTransaction();
+		try{
+			$role = TbPerfil::findOrFail($id);
+			$input = $request->except(['permissions']);
+			$role->fill($input)->save();
 
-		$p_all = Permission::all();//Get all permissions
-
-		foreach ($p_all as $p) {
-			$role->revokePermissionTo($p); //Remove all permissions associated with role
+			$p_all = TbPermissao::all();
+			foreach ($p_all as $p) {
+				$role->revokePermissionTo($p);
+			}
+			$permissions = $request['permissions'];
+			foreach ($permissions as $permission) {
+				$p = TbPermissao::where('co_seq_permissao', '=', $permission)->firstOrFail();
+				$role->givePermissionTo($p);
+			}
+			DB::commit();
+			return redirect()->route('perfis.index')->with('success',trans('messages.update'));
+		} catch(\Exception $e) {
+			DB::rollBack();
+			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
+			return redirect()->back()
+				->with('danger',$message)
+				->withInput();
 		}
-
-		foreach ($permissions as $permission) {
-			$p = Permission::where('id', '=', $permission)->firstOrFail(); //Get corresponding form //permission in db
-			$role->givePermissionTo($p);  //Assign permission to role
-		}
-
-		return redirect()->route('roles.index')
-			->with('flash_message',
-			 'Role'. $role->name.' updated!');
 	}
 
 	/**
@@ -142,12 +145,18 @@ class PerfilController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		$role = Role::findOrFail($id);
-		$role->delete();
-
-		return redirect()->route('roles.index')
-			->with('flash_message',
-			 'Role deleted!');
-
+		DB::beginTransaction();
+		try{
+			$role = TbPerfil::findOrFail($id);
+			$role->delete();
+			DB::commit();
+			return redirect()->route('perfis.index')->with('success',trans('messages.destroy'));
+		} catch(\Exception $e) {
+			DB::rollBack();
+			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
+			return redirect()->back()
+				->with('danger',$message)
+				->withInput();
+		}
 	}
 }

@@ -47,29 +47,29 @@ class PermissaoController extends Controller {
 
 		$this->validatePermissao($request);
 
-		$result = DB::transaction(function () use ($request) {
-			try{
-				$permission = new TbPermissao();
-				$permission->ds_nome = $request['ds_nome'];
-				$permission->save();
+		DB::beginTransaction();
+		try{
+			$permission = new TbPermissao();
+			$permission->ds_nome = $request['ds_nome'];
+			$permission->save();
 
-				$roles = $request['roles'];
-				if (!empty($request['roles'])) { //If one or more role is selected
-					foreach ($roles as $role) {
-						$r = TbPerfil::where('co_seq_perfil', '=', $role)->firstOrFail(); //Match input role to db record
-						$permission = TbPermissao::where('ds_nome', '=', $request['ds_nome'])->first(); //Match input //permission to db record
-						$r->givePermissionTo($permission);
-					}
+			$roles = $request['roles'];
+			if (!empty($request['roles'])) {
+				foreach ($roles as $role) {
+					$r = TbPerfil::where('co_seq_perfil', '=', $role)->firstOrFail();
+					$permission = TbPermissao::where('ds_nome', '=', $request['ds_nome'])->first();
+					$r->givePermissionTo($permission);
 				}
-				return redirect()->route('permissoes.index')
-					->with('success', trans('messages.store'));
-			} catch(\Exception $e) {
-				return redirect()->back()
-          ->withErrors(['danger' => $e->getMessage()]);
 			}
-		});
-
-		return $result;
+			DB::commit();
+			return redirect()->route('permissoes.index')
+				->with('success', trans('messages.store'));
+		} catch(\Exception $e) {
+			DB::rollBack();
+			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
+			return redirect()->back()
+				->withErrors(['danger' => $message]);
+		}
 	}
 
 	/**
@@ -90,8 +90,8 @@ class PermissaoController extends Controller {
 	*/
 	public function edit($id) {
 		$permission = TbPermissao::findOrFail($id);
-
-		return view('permissoes.edit', compact('permission'));
+		$roles = TbPerfil::get();
+		return view('permissoes.create', compact('permission','roles'));
 	}
 
 	/**
@@ -101,18 +101,24 @@ class PermissaoController extends Controller {
 	* @param  int  $id
 	* @return \Illuminate\Http\Response
 	*/
-	public function update(Request $request, $id) {
-		$permission = Permission::findOrFail($id);
-
+	public function update(Request $request, $id)
+	{
 		$this->validatePermissao($request);
-		
-		$input = $request->all();
-		$permission->fill($input)->save();
 
-		return redirect()->route('permissions.index')
-			->with('flash_message',
-			 'Permission'. $permission->name.' updated!');
-
+		DB::beginTransaction();
+		try{
+			$permission = TbPermissao::findOrFail($id);
+			$input = $request->all();
+			$permission->fill($input)->save();
+			DB::commit();
+			return redirect()->route('permissoes.index')
+				->with('success', trans('messages.update'));
+		} catch(\Exception $e) {
+			DB::rollBack();
+			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
+			return redirect()->back()
+				->withErrors(['danger' => $message]);
+		}
 	}
 
 	/**
@@ -121,21 +127,29 @@ class PermissaoController extends Controller {
 	* @param  int  $id
 	* @return \Illuminate\Http\Response
 	*/
-	public function destroy($id) {
-		$permission = TbPermissao::findOrFail($id);
+	public function destroy($id)
+	{
 
-		//Make it impossible to delete this specific permission 
-		if ($permission->ds_nome == "Administer roles & permissions") {
-			return redirect()->route('permissions.index')
-			->with('flash_message',
-			 'Cannot delete this Permission!');
+		DB::beginTransaction();
+		try{
+			$permission = TbPermissao::findOrFail($id);
+			//Make it impossible to delete this specific permission 
+			if ($permission->ds_nome == "Administer roles & permissions") {
+				return redirect()->route('permissoes.index')
+				->with('flash_message',
+				'Cannot delete this Permission!');
+			}
+			$permission->delete();
+			DB::commit();
+			return redirect()->route('permissoes.index')
+				->with('success', trans('messages.destroy'));
+		} catch(\Exception $e) {
+			DB::rollBack();
+			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
+			return redirect()->back()
+				->withErrors(['danger' => $message]);
 		}
-
-		$permission->delete();
-
-		return redirect()->route('permissao.index')
-			->with('success', trans('messages.destroy'));
-
+		
 	}
 
 	private function validatePermissao($request)

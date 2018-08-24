@@ -10,7 +10,7 @@ class CreateTbPerfilTable extends Migration {
 		Schema::create('tb_perfil', function(Blueprint $table) {
 			$table->increments('co_seq_perfil');
 			$table->string('ds_nome');
-			$table->string('ds_nome_guard');
+			$table->string('guard_name');
 			$table->timestamp('dt_inclusao')->nullable();
 			$table->timestamp('dt_atualizacao')->nullable();
 		});

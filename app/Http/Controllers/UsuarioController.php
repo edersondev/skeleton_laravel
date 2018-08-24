@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\TbUsuario;
 use App\Models\TbPerfil;
+use DB;
 
 class UsuarioController extends Controller
 {
@@ -44,19 +45,31 @@ class UsuarioController extends Controller
   */
   public function store(Request $request)
   {
-	  $this->validateUsuario($request);
+    $this->validateUsuario($request);
+    
+    DB::beginTransaction();
+    try {
+      $user = TbUsuario::create($request->only('email', 'ds_nome', 'password'));
+      $roles = $request['roles'];
+      if (isset($roles)) {
+        foreach ($roles as $role) {
+        $role_r = TbPerfil::where('co_seq_perfil', '=', $role)->firstOrFail();            
+        $user->assignRole($role_r);
+        }
+      }
 
-	  $user = TbUsuario::create($request->only('email', 'ds_nome', 'password'));
+      DB::commit();
 
-	  $roles = $request['roles'];
-	  if (isset($roles)) {
-		  foreach ($roles as $role) {
-		  $role_r = TbPerfil::where('co_seq_perfil', '=', $role)->firstOrFail();            
-		  $user->assignRole($role_r);
-		  }
-	  }
-	  return redirect()->route('usuarios.index')
-		  ->with('success', trans('messages.store'));
+      return redirect()->route('usuarios.index')
+      ->with('success', trans('messages.store'));
+      
+    } catch(\Exception $e) {
+      DB::rollBack();
+			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
+			return redirect()->back()
+				->withErrors(['danger' => $message]);
+    }
+
   }
 
   /**
@@ -78,9 +91,10 @@ class UsuarioController extends Controller
   */
   public function edit($id)
   {
-		$user = TbUsuario::findOrFail($id);
+    $user = TbUsuario::findOrFail($id);
 		$roles = TbPerfil::get();
-		return view('usuarios.create', compact('user', 'roles'));
+    $usuario_perfis = $user->roles()->pluck('co_perfil')->toarray();
+		return view('usuarios.create', compact('user', 'roles','usuario_perfis'));
   }
 
   /**
@@ -92,22 +106,32 @@ class UsuarioController extends Controller
   */
   public function update(Request $request, $id)
   {
-		$user = TbUsuario::findOrFail($id);
+    $this->validateUsuario($request,true,$id);
 
-		$this->validateUsuario($request,true,$id);
+    DB::beginTransaction();
+    try {
+      $user = TbUsuario::findOrFail($id);
+      $input = $request->only(['ds_nome', 'email', 'password']);
+      $roles = $request['roles'];
+      $user->fill($input)->save();
+  
+      if (isset($roles)) {
+        $user->roles()->sync($roles);
+      } else {
+        $user->roles()->detach();
+      }
 
-		$input = $request->only(['ds_nome', 'email', 'password']);
-		$roles = $request['roles'];
-		$user->fill($input)->save();
+      DB::commit();
 
-		if (isset($roles)) {
-			$user->roles()->sync($roles);
-		} else {
-			$user->roles()->detach();
-		}
+      return redirect()->route('usuarios.index')
+        ->with('success', trans('messages.update'));
+    } catch(\Exception $e) {
+      DB::rollBack();
+			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
+			return redirect()->back()
+				->withErrors(['danger' => $message]);
+    }
 		
-		return redirect()->route('usuarios.index')
-			->with('success', trans('messages.update'));
 	}
 
   /**
@@ -118,15 +142,28 @@ class UsuarioController extends Controller
   */
   public function destroy($id)
   {
-		if(auth()->user()->co_seq_usuario == $id){
-			return redirect()->route('usuarios.index')
-				->with('warning', 'Não é possível excluir usuário logado no sistema.');
-		}
-	  $user = TbUsuario::findOrFail($id); 
-	  $user->delete();
+    DB::beginTransaction();
+    try {
+      if(auth()->user()->co_seq_usuario == $id){
+        return redirect()->route('usuarios.index')
+          ->with('warning', 'Não é possível excluir usuário logado no sistema.');
+      }
+      $user = TbUsuario::findOrFail($id); 
+      //$user->delete();
+      $user->forceDelete();
 
-		return redirect()->route('usuarios.index')
-			->with('success', trans('messages.destroy'));
+      DB::commit();
+
+      return redirect()->route('usuarios.index')
+      ->with('success', trans('messages.destroy'));
+      
+    } catch(\Exception $e) {
+      DB::rollBack();
+			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
+			return redirect()->back()
+				->withErrors(['danger' => $message]);
+    }
+		
   }
 
 	private function validateUsuario($request, $update = false, $id = null)

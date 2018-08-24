@@ -35,7 +35,7 @@
 								<td>{{ $user->ds_nome }}</td>
 								<td>{{ $user->email }}</td>
 								<td>{{ $user->dt_inclusao->format('F d, Y h:ia') }}</td>
-								<td>{{  $user->roles()->pluck('ds_nome')->implode(' ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
+								<td>{{  $user->roles()->pluck('ds_nome')->implode(', ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
 								<td>
 								
 								{!! Form::open(['method' => 'DELETE', 'route' => ['usuarios.destroy', $user->co_seq_usuario] ]) !!}

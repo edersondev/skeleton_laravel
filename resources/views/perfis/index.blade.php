@@ -30,13 +30,13 @@
 							@foreach ($roles as $role)
 							<tr>
 			
-								<td>{{ $role->name }}</td>
+								<td>{{ $role->ds_nome }}</td>
 			
-								<td>{{ str_replace(array('[',']','"'),'', $role->permissions()->pluck('name')) }}</td>{{-- Retrieve array of permissions associated to a role and convert to string --}}
+								<td>{{ str_replace(array('[',']','"'),'', $role->permissions()->pluck('ds_nome')) }}</td>
 								<td>
-								<a href="{{ URL::to('roles/'.$role->id.'/edit') }}" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
+								<a href="{{ route('perfis.edit',$role->co_seq_perfil) }}" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
 			
-								{!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy', $role->id] ]) !!}
+								{!! Form::open(['method' => 'DELETE', 'route' => ['perfis.destroy', $role->co_seq_perfil] ]) !!}
 								{!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
 								{!! Form::close() !!}
 			

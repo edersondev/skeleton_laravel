@@ -1,13 +1,16 @@
 @extends('layouts.app')
 
 @section('title')
-	<i class='fa fa-key'></i> Adicionar Perfil
+	<i class='fa fa-key'></i> {{ get_action_page(Route::currentRouteName()) }} Perfil
 @endsection
 
 @section('content')
 
-{{ Form::open(['route' => 'perfis.store']) }}
-
+@if( Route::currentRouteName() === 'perfis.create' )
+	{{ Form::open(['route' => 'perfis.store']) }}
+@else
+	{{ Form::model($role, array('route' => array('perfis.update', $role->co_seq_perfil), 'method' => 'PUT')) }}
+@endif
 <div class="row">
 	<div class="col-6">
 
@@ -15,14 +18,19 @@
 			<div class="card-body">
 				{{ Form::bsText('ds_nome','Nome') }}
 
-				<h5><b>Associar permissões</b></h5>
-				<div class='form-group'>
+				<fieldset>
+					<legend>Associar permissões</legend>
 					@foreach ($permissions as $permission)
-						{{ Form::checkbox('permissions[]',  $permission->co_seq_permissao ) }}
-						{{ Form::label($permission->ds_nome, ucfirst($permission->ds_nome)) }}<br>
+						@php
+							$checked = null;
+							if(Route::currentRouteName() === 'perfis.edit'){
+								$checked = ( in_array($permission->co_seq_permissao,$perfil_permissoes) ? true : false );
+							}
+						@endphp
+						{{ Form::bsCheckbox('permissions[]',ucfirst($permission->ds_nome),$permission->co_seq_permissao, $checked,['id' => "item_" . $loop->iteration]) }}
 					@endforeach
-				</div>
-
+				</fieldset>
+					
 			</div>
 			<div class="card-footer">
 				@form_buttons(['routeCancel' => route('perfis.index'),'routeName' => Route::currentRouteName()])

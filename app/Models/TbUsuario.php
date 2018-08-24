@@ -84,7 +84,7 @@ class TbUsuario extends Authenticatable
             config('permission.models.role'),
             'model',
             config('permission.table_names.model_has_roles'),
-            'co_usuario',
+            'model_id',
             'co_perfil'
         );
     }
@@ -96,7 +96,7 @@ class TbUsuario extends Authenticatable
 
     public function papeis()
     {
-        return $this->hasMany('App/Models\TaModelPapeis', 'co_usuario');
+        return $this->hasMany('App/Models\TaModelPapeis', 'model_id');
     }
 
     public function permissoes()

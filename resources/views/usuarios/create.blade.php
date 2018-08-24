@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('title')
-	@if( Route::currentRouteName() === 'usuarios.create' )
-		<i class='fa fa-user-plus'></i> Adicionar Usuário
-	@else
-		<i class="fas fa-user-edit"></i> Editar Usuário
-	@endif
+	@php
+		$icon = ( Route::currentRouteName() === 'usuarios.create' ? 'plus' : 'edit' );
+	@endphp
+	<i class="fas fa-user-{{ $icon }}"></i> {{ get_action_page(Route::currentRouteName()) }} Usuário
+	
 @endsection
 
 @section('content')
@@ -43,12 +43,15 @@
 						</div>
 						<div class="card-body">
 								@if(count($roles))
-									<div class='form-group'>
-										@foreach ($roles as $role)
-											{{ Form::checkbox('roles[]',  $role->id, $user->roles ) }}
-											{{ Form::label($role->name, ucfirst($role->name)) }}<br>
-										@endforeach
-									</div>
+									@foreach ($roles as $role)
+										@php
+											$checked = null;
+											if(Route::currentRouteName() === 'usuarios.edit'){
+												$checked = ( in_array($role->co_seq_perfil,$usuario_perfis) ? true : false );
+											}
+										@endphp
+										{{ Form::bsCheckbox('roles[]',ucfirst($role->ds_nome),$role->co_seq_perfil, $checked,['id' => "item_" . $loop->iteration]) }}
+									@endforeach
 								@else
 									<h5><b>Nenhum perfil cadastrado</b></h5>
 								@endif

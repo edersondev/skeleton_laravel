@@ -46,7 +46,7 @@ class TbPermissao extends Model implements PermissionContract
 
     public function __construct(array $attributes = [])
     {
-        $attributes['ds_nome_guard'] = $attributes['ds_nome_guard'] ?? config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
 
         parent::__construct($attributes);
 
@@ -55,14 +55,14 @@ class TbPermissao extends Model implements PermissionContract
 
     public static function create(array $attributes = [])
     {
-        $attributes['ds_nome_guard'] = $attributes['ds_nome_guard'] ?? Guard::getDefaultName(static::class);
+        $attributes['guard_name'] = $attributes['guard_name'] ?? Guard::getDefaultName(static::class);
 
         $permission = static::getPermissions()->filter(function ($permission) use ($attributes) {
-            return $permission->ds_nome === $attributes['ds_nome'] && $permission->ds_nome_guard === $attributes['ds_nome_guard'];
+            return $permission->ds_nome === $attributes['ds_nome'] && $permission->guard_name === $attributes['guard_name'];
         })->first();
 
         if ($permission) {
-            throw PermissionAlreadyExists::create($attributes['ds_nome'], $attributes['ds_nome_guard']);
+            throw PermissionAlreadyExists::create($attributes['ds_nome'], $attributes['guard_name']);
         }
 
         if (isNotLumen() && app()::VERSION < '5.4') {
@@ -91,11 +91,11 @@ class TbPermissao extends Model implements PermissionContract
     public function users(): MorphToMany
     {
         return $this->morphedByMany(
-            getModelForGuard($this->attributes['ds_nome_guard']),
+            getModelForGuard($this->attributes['guard_name']),
             'model',
             config('permission.table_names.model_has_permissions'),
             'co_permissao',
-            'co_usuario'
+            'model_id'
         );
     }
 
@@ -114,7 +114,7 @@ class TbPermissao extends Model implements PermissionContract
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
 
         $permission = static::getPermissions()->filter(function ($permission) use ($name, $guardName) {
-            return $permission->ds_nome === $name && $permission->ds_nome_guard === $guardName;
+            return $permission->ds_nome === $name && $permission->guard_name === $guardName;
         })->first();
 
         if (! $permission) {
@@ -139,7 +139,7 @@ class TbPermissao extends Model implements PermissionContract
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
 
         $permission = static::getPermissions()->filter(function ($permission) use ($id, $guardName) {
-            return $permission->co_seq_permissao === $id && $permission->ds_nome_guard === $guardName;
+            return $permission->co_seq_permissao === $id && $permission->guard_name === $guardName;
         })->first();
 
         if (! $permission) {
@@ -162,11 +162,11 @@ class TbPermissao extends Model implements PermissionContract
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
 
         $permission = static::getPermissions()->filter(function ($permission) use ($name, $guardName) {
-            return $permission->ds_nome === $name && $permission->ds_nome_guard === $guardName;
+            return $permission->ds_nome === $name && $permission->guard_name === $guardName;
         })->first();
 
         if (! $permission) {
-            return static::create(['ds_nome' => $name, 'ds_nome_guard' => $guardName]);
+            return static::create(['ds_nome' => $name, 'guard_name' => $guardName]);
         }
 
         return $permission;
@@ -178,5 +178,19 @@ class TbPermissao extends Model implements PermissionContract
     protected static function getPermissions(): Collection
     {
         return app(PermissionRegistrar::class)->getPermissions();
+    }
+
+    /**
+     * A model may have multiple direct permissions.
+     */
+    public function permissions(): MorphToMany
+    {
+        return $this->morphToMany(
+            config('permission.models.permission'),
+            'model',
+            config('permission.table_names.model_has_permissions'),
+            'model_id',
+            'co_permissao'
+        );
     }
 }

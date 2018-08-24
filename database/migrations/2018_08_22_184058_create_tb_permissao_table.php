@@ -10,7 +10,7 @@ class CreateTbPermissaoTable extends Migration {
 		Schema::create('tb_permissao', function(Blueprint $table) {
 			$table->increments('co_seq_permissao');
 			$table->string('ds_nome');
-			$table->string('ds_nome_guard');
+			$table->string('guard_name');
 			$table->timestamp('dt_inclusao')->nullable();
 			$table->timestamp('dt_atualizacao')->nullable();
 		});

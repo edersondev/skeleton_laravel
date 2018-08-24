@@ -24,7 +24,7 @@ class CreateForeignKeys extends Migration {
 						->onUpdate('no action');
 		});
 		Schema::table('ta_model_perfis', function(Blueprint $table) {
-			$table->foreign('co_usuario')->references('co_seq_usuario')->on('tb_usuario')
+			$table->foreign('model_id')->references('co_seq_usuario')->on('tb_usuario')
 						->onDelete('cascade')
 						->onUpdate('no action');
 		});
@@ -34,7 +34,7 @@ class CreateForeignKeys extends Migration {
 						->onUpdate('no action');
 		});
 		Schema::table('ta_model_permissoes', function(Blueprint $table) {
-			$table->foreign('co_usuario')->references('co_seq_usuario')->on('tb_usuario')
+			$table->foreign('model_id')->references('co_seq_usuario')->on('tb_usuario')
 						->onDelete('cascade')
 						->onUpdate('no action');
 		});
@@ -52,13 +52,13 @@ class CreateForeignKeys extends Migration {
 			$table->dropForeign('ta_model_perfis_co_perfil_foreign');
 		});
 		Schema::table('ta_model_perfis', function(Blueprint $table) {
-			$table->dropForeign('ta_model_perfis_co_usuario_foreign');
+			$table->dropForeign('ta_model_perfis_model_id_foreign');
 		});
 		Schema::table('ta_model_permissoes', function(Blueprint $table) {
 			$table->dropForeign('ta_model_permissoes_co_permissao_foreign');
 		});
 		Schema::table('ta_model_permissoes', function(Blueprint $table) {
-			$table->dropForeign('ta_model_permissoes_co_usuario_foreign');
+			$table->dropForeign('ta_model_permissoes_model_id_foreign');
 		});
 	}
 }

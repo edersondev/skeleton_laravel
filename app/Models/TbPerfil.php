@@ -45,7 +45,7 @@ class TbPerfil extends Model implements RoleContract
 
     public function __construct(array $attributes = [])
     {
-        $attributes['ds_nome_guard'] = $attributes['ds_nome_guard'] ?? config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
 
         parent::__construct($attributes);
 
@@ -54,10 +54,10 @@ class TbPerfil extends Model implements RoleContract
 
     public static function create(array $attributes = [])
     {
-        $attributes['ds_nome_guard'] = $attributes['ds_nome_guard'] ?? Guard::getDefaultName(static::class);
+        $attributes['guard_name'] = $attributes['guard_name'] ?? Guard::getDefaultName(static::class);
 
-        if (static::where('ds_nome', $attributes['ds_nome'])->where('ds_nome_guard', $attributes['ds_nome_guard'])->first()) {
-            throw RoleAlreadyExists::create($attributes['ds_nome'], $attributes['ds_nome_guard']);
+        if (static::where('ds_nome', $attributes['ds_nome'])->where('guard_name', $attributes['guard_name'])->first()) {
+            throw RoleAlreadyExists::create($attributes['ds_nome'], $attributes['guard_name']);
         }
 
         if (isNotLumen() && app()::VERSION < '5.4') {
@@ -75,7 +75,7 @@ class TbPerfil extends Model implements RoleContract
         return $this->belongsToMany(
             config('permission.models.permission'),
             config('permission.table_names.role_has_permissions'),
-            'co_usuario',
+            'co_perfil',
             'co_permissao'
         );
     }
@@ -86,11 +86,11 @@ class TbPerfil extends Model implements RoleContract
     public function users(): MorphToMany
     {
         return $this->morphedByMany(
-            getModelForGuard($this->attributes['ds_nome_guard']),
+            getModelForGuard($this->attributes['guard_name']),
             'model',
             config('permission.table_names.model_has_roles'),
             'co_perfil',
-            'co_usuario'
+            'model_id'
         );
     }
 
@@ -108,7 +108,7 @@ class TbPerfil extends Model implements RoleContract
     {
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
 
-        $role = static::where('ds_nome', $name)->where('ds_nome_guard', $guardName)->first();
+        $role = static::where('ds_nome', $name)->where('guard_name', $guardName)->first();
 
         if (! $role) {
             throw RoleDoesNotExist::named($name);
@@ -121,7 +121,7 @@ class TbPerfil extends Model implements RoleContract
     {
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
 
-        $role = static::where('co_seq_perfil', $id)->where('ds_nome_guard', $guardName)->first();
+        $role = static::where('co_seq_perfil', $id)->where('guard_name', $guardName)->first();
 
         if (! $role) {
             throw RoleDoesNotExist::withId($id);
@@ -142,10 +142,10 @@ class TbPerfil extends Model implements RoleContract
     {
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
 
-        $role = static::where('ds_nome', $name)->where('ds_nome_guard', $guardName)->first();
+        $role = static::where('ds_nome', $name)->where('guard_name', $guardName)->first();
 
         if (! $role) {
-            return static::create(['ds_nome' => $name, 'ds_nome_guard' => $guardName]);
+            return static::create(['ds_nome' => $name, 'guard_name' => $guardName]);
         }
 
         return $role;
@@ -170,8 +170,8 @@ class TbPerfil extends Model implements RoleContract
             $permission = app(Permission::class)->findById($permission, $this->getDefaultGuardName());
         }
 
-        if (! $this->getGuardNames()->contains($permission->ds_nome_guard)) {
-            throw GuardDoesNotMatch::create($permission->ds_nome_guard, $this->getGuardNames());
+        if (! $this->getGuardNames()->contains($permission->guard_name)) {
+            throw GuardDoesNotMatch::create($permission->guard_name, $this->getGuardNames());
         }
 
         return $this->permissions->contains('id', $permission->co_seq_permissao);

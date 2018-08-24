@@ -22,3 +22,15 @@ if (! function_exists('get_route_method')) {
 		return $action[1];
 	}
 }
+
+if (! function_exists('get_action_page')) {
+	/**
+	 * Get action for title of page
+	 * @param string $routeName
+	 * @return string
+	 */
+	function get_action_page($routeName){
+		$action = explode('.',$routeName);
+		return ( $action[1] === 'create' ? 'Adicionar' : 'Atualizar' );
+	}
+}

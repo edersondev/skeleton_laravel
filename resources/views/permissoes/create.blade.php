@@ -1,12 +1,16 @@
 @extends('layouts.app')
 
 @section('title')
-	<i class='fa fa-key'></i> Adicionar Permissão
+	<i class='fa fa-key'></i> {{ get_action_page(Route::currentRouteName()) }} Permissão
 @endsection
 
 @section('content')
 
-{{ Form::open(['route' => 'permissoes.store']) }}
+@if( Route::currentRouteName() === 'permissoes.create' )
+	{{ Form::open(['route' => 'permissoes.store']) }}
+@else
+	{{ Form::model($permission, array('route' => array('permissoes.update', $permission->co_seq_permissao), 'method' => 'PUT')) }}
+@endif
 
 	<div class="row">
 		<div class="col-6">
