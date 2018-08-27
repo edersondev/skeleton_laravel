@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exceptions\CustomException;
 
 use App\Models\TbUsuario;
 use App\Models\TbPerfil;
@@ -63,11 +64,10 @@ class UsuarioController extends Controller
       return redirect()->route('usuarios.index')
       ->with('success', trans('messages.store'));
       
-    } catch(\Exception $e) {
+    } catch(CustomException $e) {
       DB::rollBack();
-			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
 			return redirect()->back()
-				->withErrors(['danger' => $message]);
+				->with($e->getTypeMessage(), $e->getMessage());
     }
 
   }
@@ -92,6 +92,7 @@ class UsuarioController extends Controller
   public function edit($id)
   {
     $user = TbUsuario::findOrFail($id);
+    //dd($user);
 		$roles = TbPerfil::get();
     $usuario_perfis = $user->roles()->pluck('co_perfil')->toarray();
 		return view('usuarios.create', compact('user', 'roles','usuario_perfis'));
@@ -111,10 +112,14 @@ class UsuarioController extends Controller
     DB::beginTransaction();
     try {
       $user = TbUsuario::findOrFail($id);
-      $input = $request->only(['ds_nome', 'email', 'password']);
-      $roles = $request['roles'];
+      $input = $request->only(['ds_nome', 'email', 'password','st_ativo']);
+      $input['st_ativo'] = ( isset($input['st_ativo']) && $input['st_ativo'] == 1 ? true : false );
+      if(is_null($input['password'])){
+        unset($input['password']);
+      }
       $user->fill($input)->save();
-  
+
+      $roles = $request['roles'];
       if (isset($roles)) {
         $user->roles()->sync($roles);
       } else {
@@ -125,12 +130,11 @@ class UsuarioController extends Controller
 
       return redirect()->route('usuarios.index')
         ->with('success', trans('messages.update'));
-    } catch(\Exception $e) {
-      DB::rollBack();
-			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
-			return redirect()->back()
-				->withErrors(['danger' => $message]);
-    }
+      } catch(CustomException $e) {
+        DB::rollBack();
+        return redirect()->back()
+          ->with($e->getTypeMessage(), $e->getMessage());
+      }
 		
 	}
 
@@ -145,8 +149,7 @@ class UsuarioController extends Controller
     DB::beginTransaction();
     try {
       if(auth()->user()->co_seq_usuario == $id){
-        return redirect()->route('usuarios.index')
-          ->with('warning', 'Não é possível excluir usuário logado no sistema.');
+        throw new CustomException('Não é possível excluir usuário logado no sistema.',0,'warning');
       }
       $user = TbUsuario::findOrFail($id); 
       //$user->delete();
@@ -157,11 +160,10 @@ class UsuarioController extends Controller
       return redirect()->route('usuarios.index')
       ->with('success', trans('messages.destroy'));
       
-    } catch(\Exception $e) {
+    } catch(CustomException $e) {
       DB::rollBack();
-			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
 			return redirect()->back()
-				->withErrors(['danger' => $message]);
+				->with($e->getTypeMessage(), $e->getMessage());
     }
 		
   }
@@ -170,9 +172,11 @@ class UsuarioController extends Controller
 	{
 		$rules = [
 			'ds_nome'=>'required|max:120',
-		  'email'=>'required|email|unique:tb_usuario',
-		  'password'=>'required|min:6|confirmed'
-		];
+		  'email'=>'required|email|unique:tb_usuario'
+    ];
+    if(!empty($request['password'])){
+      $rules['password'] = 'required|min:6|confirmed';
+    }
 		if($update){
 			$rules['email'] = "required|email|unique:tb_usuario,email,{$id},co_seq_usuario";
 		}

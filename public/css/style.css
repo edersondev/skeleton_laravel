@@ -9,3 +9,17 @@
 .asteriskField{
   color: red;
 }
+
+.checkbox-slider--a input + span:after {
+  content: "Não";
+  font-size: 13px;
+}
+
+.checkbox-slider--a input:checked + span:after {
+  content: "Sim";
+  font-size: 13px;
+}
+
+span.is-invalid{
+  color: #dc3545;
+}

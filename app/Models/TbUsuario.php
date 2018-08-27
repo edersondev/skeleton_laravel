@@ -56,7 +56,7 @@ class TbUsuario extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'ds_nome', 'email', 'password',
+        'ds_nome', 'email', 'password','st_ativo'
     ];
 
     /**

@@ -1,11 +1,14 @@
 @extends('layouts.app')
 
+@push('css')
+	<link rel="stylesheet" href="{{ URL::asset('components/titatoggle/titatoggle-dist-min.css') }}">
+@endpush
+
 @section('title')
 	@php
 		$icon = ( Route::currentRouteName() === 'usuarios.create' ? 'plus' : 'edit' );
 	@endphp
 	<i class="fas fa-user-{{ $icon }}"></i> {{ get_action_page(Route::currentRouteName()) }} Usuário
-	
 @endsection
 
 @section('content')
@@ -29,8 +32,14 @@
 							<div class="card-body">
 								{{ Form::bsText('ds_nome','Nome') }}
 								{{ Form::bsEmail('email','Email') }}
-								{{ Form::bsPassword('password','Senha') }}
+								
+								@php
+									$helpTextPassword = ( Route::currentRouteName() === 'usuarios.create' ? null : 'Deixe o campo em branco para manter a mesma senha.' );		
+								@endphp
+								{{ Form::bsPassword('password','Senha',$helpTextPassword) }}
+
 								{{ Form::bsPassword('password_confirmation',' Confirmar Senha') }}
+								{{ Form::bsTitaCheckbox('st_ativo','Usuário ativo?',1,( isset($user->st_ativo) ? $user->st_ativo : 0 )) }}
 							</div>
 						</div>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exceptions\CustomException;
 
 use App\Models\TbPerfil;
 use App\Models\TbPermissao;
@@ -65,11 +66,10 @@ class PerfilController extends Controller {
 			}
 			DB::commit();
 			return redirect()->route('perfis.index')->with('success',trans('messages.store'));
-		} catch(\Exception $e) {
+		} catch(CustomException $e) {
 			DB::rollBack();
-			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
 			return redirect()->back()
-				->with('danger',$message)
+				->with($e->getTypeMessage(), $e->getMessage())
 				->withInput();
 		}
 	}
@@ -128,11 +128,10 @@ class PerfilController extends Controller {
 			}
 			DB::commit();
 			return redirect()->route('perfis.index')->with('success',trans('messages.update'));
-		} catch(\Exception $e) {
+		} catch(CustomException $e) {
 			DB::rollBack();
-			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
 			return redirect()->back()
-				->with('danger',$message)
+				->with($e->getTypeMessage(), $e->getMessage())
 				->withInput();
 		}
 	}
@@ -151,11 +150,10 @@ class PerfilController extends Controller {
 			$role->delete();
 			DB::commit();
 			return redirect()->route('perfis.index')->with('success',trans('messages.destroy'));
-		} catch(\Exception $e) {
+		} catch(CustomException $e) {
 			DB::rollBack();
-			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
 			return redirect()->back()
-				->with('danger',$message)
+				->with($e->getTypeMessage(), $e->getMessage())
 				->withInput();
 		}
 	}

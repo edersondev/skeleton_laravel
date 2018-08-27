@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exceptions\CustomException;
 use App\Models\TbPerfil;
 use App\Models\TbPermissao;
 
@@ -64,12 +65,11 @@ class PermissaoController extends Controller {
 			DB::commit();
 			return redirect()->route('permissoes.index')
 				->with('success', trans('messages.store'));
-		} catch(\Exception $e) {
-			DB::rollBack();
-			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
-			return redirect()->back()
-				->withErrors(['danger' => $message]);
-		}
+			} catch(CustomException $e) {
+				DB::rollBack();
+				return redirect()->back()
+					->with($e->getTypeMessage(), $e->getMessage());
+			}
 	}
 
 	/**
@@ -113,12 +113,11 @@ class PermissaoController extends Controller {
 			DB::commit();
 			return redirect()->route('permissoes.index')
 				->with('success', trans('messages.update'));
-		} catch(\Exception $e) {
-			DB::rollBack();
-			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
-			return redirect()->back()
-				->withErrors(['danger' => $message]);
-		}
+			} catch(CustomException $e) {
+				DB::rollBack();
+				return redirect()->back()
+					->with($e->getTypeMessage(), $e->getMessage());
+			}
 	}
 
 	/**
@@ -143,12 +142,11 @@ class PermissaoController extends Controller {
 			DB::commit();
 			return redirect()->route('permissoes.index')
 				->with('success', trans('messages.destroy'));
-		} catch(\Exception $e) {
-			DB::rollBack();
-			$message = ( env('APP_DEBUG') === true ? $e->getMessage() : trans('messages.error_exception') );
-			return redirect()->back()
-				->withErrors(['danger' => $message]);
-		}
+			} catch(CustomException $e) {
+				DB::rollBack();
+				return redirect()->back()
+					->with($e->getTypeMessage(), $e->getMessage());
+			}
 		
 	}
 

@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="{{ URL::asset('components/bootstrap/dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('components/fortawesome/web-fonts-with-css/css/fontawesome-all.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('components/adminlte/dist/css/adminlte.min.css') }}">
-    <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
     @stack('css')
+    <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
 
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -95,13 +95,8 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- jQuery -->
     <script src="{{ URL::asset('components/jquery/jquery.min.js') }}" ></script>
-    <script src="{{ URL::asset('components/popper/dist/umd/popper.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ URL::asset('components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <!-- SlimScroll -->
-    <script src="{{ URL::asset('components/slimScroll/jquery.slimscroll.min.js') }}"></script>
-    <!-- FastClick -->
-    <script src="{{ URL::asset('components/fastclick/lib/fastclick.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ URL::asset('components/adminlte/dist/js/adminlte.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
