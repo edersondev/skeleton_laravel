@@ -20,6 +20,7 @@ Route::group(['middleware' => 'auth'], function() {
   Route::get('/home', 'HomeController@index')->name('home');
 
   Route::resource('usuarios', 'UsuarioController');
+  Route::match(['get','post'],'usuarios/jsonlista','UsuarioController@jsonLista')->name('usuarios.jsonlista');
   Route::resource('perfis', 'PerfilController');
   Route::resource('permissoes', 'PermissaoController');
 });

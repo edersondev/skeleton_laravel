@@ -15,6 +15,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::component('components.form.form_buttons', 'form_buttons');
+        Blade::component('components.bootstrap.modal_confirm', 'modal_confirm');
+        Blade::component('components.js.modal_confirm_action', 'modal_confirm_action');
     }
 
     /**

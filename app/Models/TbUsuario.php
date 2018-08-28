@@ -8,6 +8,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Contracts\Role;
 
 class TbUsuario extends Authenticatable 
 {
@@ -92,6 +93,39 @@ class TbUsuario extends Authenticatable
     public function setPasswordAttribute($password)
     {   
         $this->attributes['password'] = Hash::make($password);
+    }
+
+    /**
+     * Assign the given role to the model.
+     *
+     * @param array|string|\Spatie\Permission\Contracts\Role ...$roles
+     *
+     * @return $this
+     */
+    public function assignRole(...$roles)
+    {
+        $roles = collect($roles)
+            ->flatten()
+            ->map(function ($role) {
+                if (empty($role)) {
+                    return false;
+                }
+
+                return $this->getStoredRole($role);
+            })
+            ->filter(function ($role) {
+                return $role instanceof Role;
+            })
+            ->each(function ($role) {
+                $this->ensureModelSharesGuard($role);
+            })
+            ->map->co_seq_perfil
+            ->all();
+        $this->roles()->sync($roles, false);
+
+        $this->forgetCachedPermissions();
+
+        return $this;
     }
 
     public function papeis()

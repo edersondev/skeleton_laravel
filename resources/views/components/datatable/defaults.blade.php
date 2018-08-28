@@ -12,7 +12,7 @@ $.extend( true, $.fn.dataTable.defaults, {
         }
     } ),
     language: {
-        url: "{!! URL::asset('components/datatables-plugins/i18n/Portuguese-Brasil.json') !!}"
+        url: "{!! URL::asset('js/datatables-plugins/i18n/Portuguese-Brasil.json') !!}"
     },
     dom:
         "<'row'<'col-sm-6'l><'col-sm-6'>>" +

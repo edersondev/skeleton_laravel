@@ -91,7 +91,8 @@ class PermissaoController extends Controller {
 	public function edit($id) {
 		$permission = TbPermissao::findOrFail($id);
 		$roles = TbPerfil::get();
-		return view('permissoes.create', compact('permission','roles'));
+		$permissoes_perfil = $permission->roles()->pluck('co_perfil')->toarray();
+		return view('permissoes.create', compact('permission','roles','permissoes_perfil'));
 	}
 
 	/**
@@ -107,9 +108,24 @@ class PermissaoController extends Controller {
 
 		DB::beginTransaction();
 		try{
+
 			$permission = TbPermissao::findOrFail($id);
-			$input = $request->all();
-			$permission->fill($input)->save();
+			$permission->ds_nome = $request['ds_nome'];
+			$permission->save();
+
+			$r_all = TbPerfil::all();
+			foreach ($r_all as $r) {
+				$permission->removeRole($r);
+			}
+
+			if (!empty($request['roles'])) {
+				foreach ($request['roles'] as $role) {
+					$r = TbPerfil::where('co_seq_perfil', '=', $role)->firstOrFail();
+					$permission = TbPermissao::where('ds_nome', '=', $request['ds_nome'])->first();
+					$r->givePermissionTo($permission);
+				}
+			}
+
 			DB::commit();
 			return redirect()->route('permissoes.index')
 				->with('success', trans('messages.update'));

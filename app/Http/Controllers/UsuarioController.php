@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Exceptions\CustomException;
-
 use App\Models\TbUsuario;
 use App\Models\TbPerfil;
+use Yajra\Datatables\Datatables;
 use DB;
 
 class UsuarioController extends Controller
@@ -25,6 +25,11 @@ class UsuarioController extends Controller
   {
 		$users = TbUsuario::all(); 
 		return view('usuarios.index')->with('users', $users);
+  }
+
+  public function jsonLista()
+  {
+    return Datatables::of(TbUsuario::query())->make(true);
   }
 
   /**
@@ -54,8 +59,8 @@ class UsuarioController extends Controller
       $roles = $request['roles'];
       if (isset($roles)) {
         foreach ($roles as $role) {
-        $role_r = TbPerfil::where('co_seq_perfil', '=', $role)->firstOrFail();            
-        $user->assignRole($role_r);
+          $role_r = TbPerfil::where('co_seq_perfil', '=', $role)->firstOrFail();
+          $user->assignRole($role_r);
         }
       }
 

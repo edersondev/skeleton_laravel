@@ -40,6 +40,18 @@
                     "reference":"master"
                 }
             }
+        },
+        "jquery-dateFormat":{
+            "type": "package",
+            "package":{
+                "name": "phstc/jquery-dateFormat",
+                "version": "master",
+                "source": {
+                    "url": "https://github.com/phstc/jquery-dateFormat",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
         }
     },
     "require": {
@@ -55,11 +67,11 @@
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.6",
-        "moment/moment": "^2.22",
         "spatie/laravel-permission": "^2.12",
         "twbs/bootstrap": "4.1.1",
         "yajra/laravel-datatables-oracle": "^8.5",
-        "kleinejan/titatoggle": "master"
+        "kleinejan/titatoggle": "master",
+        "phstc/jquery-dateFormat": "master"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

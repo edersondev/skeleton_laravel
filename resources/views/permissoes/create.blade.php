@@ -21,8 +21,13 @@
 					@if(!$roles->isEmpty())
 						<h4>Associar permissão para os perfis</h4>
 						@foreach ($roles as $role) 
-							{{ Form::checkbox('roles[]',  $role->id ) }}
-							{{ Form::label($role->name, ucfirst($role->name)) }}<br>
+							@php
+								$checked = null;
+								if(Route::currentRouteName() === 'permissoes.edit'){
+									$checked = ( in_array($role->co_seq_perfil,$permissoes_perfil) ? true : false );
+								}
+							@endphp
+							{{ Form::bsCheckbox('roles[]',ucfirst($role->ds_nome),$role->co_seq_perfil, $checked,['id' => "item_" . $loop->iteration]) }}
 						@endforeach
 					@endif
 

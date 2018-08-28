@@ -12,6 +12,7 @@ use Spatie\Permission\Contracts\Role as RoleContract;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Permission\Contracts\Permission;
 
 class TbPerfil extends Model implements RoleContract
 {
@@ -175,6 +176,33 @@ class TbPerfil extends Model implements RoleContract
         }
 
         return $this->permissions->contains('id', $permission->co_seq_permissao);
+    }
+
+    /**
+     * Grant the given permission(s) to a role.
+     *
+     * @param string|array|\Spatie\Permission\Contracts\Permission|\Illuminate\Support\Collection $permissions
+     *
+     * @return $this
+     */
+    public function givePermissionTo(...$permissions)
+    {
+        $permissions = collect($permissions)
+            ->flatten()
+            ->map(function ($permission) {
+                return $this->getStoredPermission($permission);
+            })
+            ->filter(function ($permission) {
+                return $permission instanceof Permission;
+            })
+            ->each(function ($permission) {
+                $this->ensureModelSharesGuard($permission);
+            })
+            ->map->co_seq_permissao
+            ->all();
+        $this->permissions()->sync($permissions, false);
+        $this->forgetCachedPermissions();
+        return $this;
     }
 
 }

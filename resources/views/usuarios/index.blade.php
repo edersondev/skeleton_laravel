@@ -1,5 +1,16 @@
 @extends('layouts.app')
 
+@push('css')
+	<link rel="stylesheet" href="{{ URL::asset('components/datatables/css/dataTables.bootstrap4.min.css') }}">
+@endpush
+
+@push('js')
+	<script src="{{ URL::asset('components/datatables/js/jquery.dataTables.min.js') }}"></script>
+	<script src="{{ URL::asset('components/datatables/js/dataTables.bootstrap4.min.js') }}"></script>
+	<script src="{{ URL::asset('js/datatables-plugins/cache/pipelining.js') }}"></script>
+	<script src="{{ URL::asset('components/jquery-dateFormat/jquery-dateformat.min.js') }}"></script>
+@endpush
+
 @section('title')
 	<i class="fa fa-users"></i> Lista de Usuários
 @endsection
@@ -18,35 +29,18 @@
 			</div>
 			<div class="card-body">
 
-				<div class="table-responsive">
-					<table class="table table-bordered table-striped">
+				<div class="dataTable_wrapper">
+					<table class="table table-striped table-bordered table-hover" id="users-table" width="100%">
 						<thead>
 							<tr>
-								<th>Name</th>
+								<th>ID</th>
+								<th>Nome</th>
 								<th>Email</th>
-								<th>Date/Time Added</th>
-								<th>User Roles</th>
-								<th>Operations</th>
+								<th>Data de cadastro</th>
+								<th>Usuário ativo?</th>
+								<th>Ações</th>
 							</tr>
 						</thead>
-						<tbody>
-							@foreach ($users as $user)
-							<tr>
-								<td>{{ $user->ds_nome }}</td>
-								<td>{{ $user->email }}</td>
-								<td>{{ $user->dt_inclusao->format('F d, Y h:ia') }}</td>
-								<td>{{  $user->roles()->pluck('ds_nome')->implode(', ') }}</td>{{-- Retrieve array of roles associated to a user and convert to string --}}
-								<td>
-								
-								{!! Form::open(['method' => 'DELETE', 'route' => ['usuarios.destroy', $user->co_seq_usuario] ]) !!}
-								<a href="{{ route('usuarios.edit', $user->co_seq_usuario) }}" class="btn btn-info" style="margin-right: 3px;">Edit</a>
-								{!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-								{!! Form::close() !!}
-			
-								</td>
-							</tr>
-							@endforeach
-						</tbody>
 					</table>
 				</div>
 
@@ -61,4 +55,58 @@
 	</div>
 </div>
 
+{{-- Componente de Modal: views/components/bootstrap/modal_confirm --}}
+@modal_confirm()
+@endmodal_confirm
+
 @endsection
+
+@push('js')
+	<script>
+
+		$(function() {
+
+			@component('components.datatable.defaults')
+				{!! route('usuarios.jsonlista') !!}
+			@endcomponent
+
+			var usersTable = $('#users-table').DataTable({
+				columns: [
+					{data: 'co_seq_usuario',visible:false},
+					{data: 'ds_nome'},
+					{data: 'email'},
+					{
+						data: 'dt_inclusao',
+						render: function(data,type,full,meta){
+							return $.format.date(data, "dd/MM/yyyy HH:mm");
+						}
+					},
+					{
+						data: 'st_ativo',
+						render: function(data,type,full,meta){
+							if(data === false){
+								return `<span class="badge badge-danger">Não</span>`;
+							}
+							return `<span class="badge badge-success">Sim</span>`;
+						}
+					},
+					{
+						data: 'co_seq_usuario',
+						render: function(data,type,full,meta){
+							var url_edit = `{!! route('usuarios.index') !!}/${data}/edit`;
+							var form_action = `{!! route('usuarios.index') !!}/${data}`;
+							var form_name = `deluser-${data}`;
+							return dataTablesFormDestroy(url_edit,form_name,form_action);
+						}
+					}
+				]
+			});
+			
+			{{-- 'Componente de ação do modal: views/components/js/modal_confirm_action' --}}
+			@modal_confirm_action()
+			@endmodal_confirm_action
+
+		});
+
+	</script>
+@endpush
