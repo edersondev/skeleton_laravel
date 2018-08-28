@@ -92,6 +92,8 @@
 					},
 					{
 						data: 'co_seq_usuario',
+						searchable: false,
+						orderable: false,
 						render: function(data,type,full,meta){
 							var url_edit = `{!! route('usuarios.index') !!}/${data}/edit`;
 							var form_action = `{!! route('usuarios.index') !!}/${data}`;
