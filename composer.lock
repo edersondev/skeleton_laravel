@@ -15,7 +15,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2018-05-10T14:58:36+00:00"
+            "time": "2018-08-06T14:44:29+00:00"
         },
         {
             "name": "almasaeed2010/AdminLTE",
@@ -1780,23 +1780,20 @@
         },
         {
             "name": "spatie/laravel-permission",
-            "version": "2.17.0",
+            "version": "2.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-permission.git",
-                "reference": "32d1b2a8e3cd2d68e0bc572be3d9d416b56fa07f"
+                "reference": "a0e05fd4f5729d96be20dfc768c5b1a4d2586838"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/32d1b2a8e3cd2d68e0bc572be3d9d416b56fa07f",
-                "reference": "32d1b2a8e3cd2d68e0bc572be3d9d416b56fa07f",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/a0e05fd4f5729d96be20dfc768c5b1a4d2586838",
+                "reference": "a0e05fd4f5729d96be20dfc768c5b1a4d2586838",
                 "shasum": ""
             },
             "require": {
-                "illuminate/auth": "~5.3.0|~5.4.0|~5.5.0|~5.6.0|~5.7.0",
-                "illuminate/container": "~5.3.0|~5.4.0|~5.5.0|~5.6.0|~5.7.0",
-                "illuminate/contracts": "~5.3.0|~5.4.0|~5.5.0|~5.6.0|~5.7.0",
-                "illuminate/database": "~5.4.0|~5.5.0|~5.6.0|~5.7.0",
+                "laravel/framework": "~5.4.0|~5.5.0|~5.6.0|~5.7.0",
                 "php": ">=7.0"
             },
             "require-dev": {
@@ -1840,7 +1837,7 @@
                 "security",
                 "spatie"
             ],
-            "time": "2018-08-24T13:39:52+00:00"
+            "time": "2018-08-28T14:20:07+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

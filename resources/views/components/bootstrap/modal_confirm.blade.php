@@ -9,7 +9,7 @@
         </button>
       </div>
       <div class="modal-body">
-        {{ isset($body) ? $body : 'Tem certeza de que deseja excluir este registro?' }}
+        {{ $slot }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -22,3 +22,22 @@
     </div>
   </div>
 </div>
+
+@push('js')
+  <script>
+    $(function(){
+      $('#{{ isset($modal_id) ? $modal_id : 'exampleModal' }}').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget),
+            form = button.parent(),
+            modal = $(this);
+        modal.find('.modal-footer button.confirm-submit').attr('data-form',form.attr('id'));
+      });
+
+      $('.confirm-submit').on('click',function(){
+        var form_id = $(this).attr('data-form');
+        $("form#" + form_id).submit();
+      });
+
+    });
+  </script>
+@endpush

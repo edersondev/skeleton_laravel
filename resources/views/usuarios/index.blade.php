@@ -57,6 +57,7 @@
 
 {{-- Componente de Modal: views/components/bootstrap/modal_confirm --}}
 @modal_confirm()
+	{{ trans('messages.confirm_destroy') }}
 @endmodal_confirm
 
 @endsection
@@ -104,10 +105,6 @@
 				]
 			});
 			
-			{{-- 'Componente de ação do modal: views/components/js/modal_confirm_action' --}}
-			@modal_confirm_action()
-			@endmodal_confirm_action
-
 		});
 
 	</script>
