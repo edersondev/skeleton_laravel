@@ -128,6 +128,72 @@ class TbUsuario extends Authenticatable
         return $this;
     }
 
+    /**
+     * Determine if the model has (one of) the given role(s).
+     *
+     * @param string|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
+     *
+     * @return bool
+     */
+    public function hasRole($roles): bool
+    {
+        if (is_string($roles) && false !== strpos($roles, '|')) {
+            $roles = $this->convertPipeToArray($roles);
+        }
+
+        if (is_string($roles)) {
+            return $this->roles->contains('ds_nome', $roles);
+        }
+
+        if ($roles instanceof Role) {
+            return $this->roles->contains('co_seq_perfil', $roles->co_seq_perfil);
+        }
+
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if ($this->hasRole($role)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return $roles->intersect($this->roles)->isNotEmpty();
+    }
+
+    /**
+     * Determine if the model has the given permission.
+     *
+     * @param string|int|\Spatie\Permission\Contracts\Permission $permission
+     *
+     * @return bool
+     */
+    public function hasDirectPermission($permission): bool
+    {
+        $permissionClass = $this->getPermissionClass();
+
+        if (is_string($permission)) {
+            $permission = $permissionClass->findByName($permission, $this->getDefaultGuardName());
+            if (! $permission) {
+                return false;
+            }
+        }
+
+        if (is_int($permission)) {
+            $permission = $permissionClass->findById($permission, $this->getDefaultGuardName());
+            if (! $permission) {
+                return false;
+            }
+        }
+
+        if (! $permission instanceof Permission) {
+            return false;
+        }
+
+        return $this->permissions->contains('co_seq_permissao', $permission->co_seq_permissao);
+    }
+
     public function papeis()
     {
         return $this->hasMany('App/Models\TaModelPapeis', 'model_id');

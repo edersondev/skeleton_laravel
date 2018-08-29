@@ -40,4 +40,19 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function attemptLogin(Request $request)
+    {
+        $credentials = $this->credentials($request);
+        $credentials['st_ativo'] = true;
+        return $this->guard()->attempt(
+            $credentials, $request->filled('remember')
+        );
+    }
+
 }

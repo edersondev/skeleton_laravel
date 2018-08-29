@@ -10,14 +10,8 @@ use App\Models\TbPermissao;
 use Yajra\Datatables\Datatables;
 use DB;
 
-class PerfilController extends Controller {
-
-	public function __construct() {
-		$this->middleware([
-			//'auth', 
-			//'isAdmin'
-		]);//isAdmin middleware lets only users with a //specific permission permission to access these resources
-	}
+class PerfilController extends Controller
+{
 
 	/**
 	 * Display a listing of the resource.
@@ -53,8 +47,7 @@ class PerfilController extends Controller {
 	public function store(Request $request) {
 	
 		$this->validate($request, [
-			'ds_nome'=>'required|unique:tb_perfil|max:10',
-			'permissions' =>'required',
+			'ds_nome'=>'required|unique:tb_perfil|max:15',
 			]
 		);
 
@@ -65,10 +58,12 @@ class PerfilController extends Controller {
 			$role->save();
 
 			$permissions = $request['permissions'];
-			foreach ($permissions as $permission) {
-				$p = TbPermissao::where('co_seq_permissao', '=', $permission)->firstOrFail(); 
-				$role = TbPerfil::where('ds_nome', '=', $request['ds_nome'])->first(); 
-				$role->givePermissionTo($p);
+			if($permissions){
+				foreach ($permissions as $permission) {
+					$p = TbPermissao::where('co_seq_permissao', '=', $permission)->firstOrFail(); 
+					$role = TbPerfil::where('ds_nome', '=', $request['ds_nome'])->first(); 
+					$role->givePermissionTo($p);
+				}
 			}
 			DB::commit();
 			return redirect()->route('perfis.index')->with('success',trans('messages.store'));
@@ -114,7 +109,6 @@ class PerfilController extends Controller {
 	{
 		$this->validate($request, [
 			"ds_nome'=>'required|max:10|unique:tb_perfil,ds_nome,{$id},co_seq_perfil",
-			'permissions' =>'required',
 		]);
 
 		DB::beginTransaction();
@@ -128,9 +122,11 @@ class PerfilController extends Controller {
 				$role->revokePermissionTo($p);
 			}
 			$permissions = $request['permissions'];
-			foreach ($permissions as $permission) {
-				$p = TbPermissao::where('co_seq_permissao', '=', $permission)->firstOrFail();
-				$role->givePermissionTo($p);
+			if($permissions){
+				foreach ($permissions as $permission) {
+					$p = TbPermissao::where('co_seq_permissao', '=', $permission)->firstOrFail();
+					$role->givePermissionTo($p);
+				}
 			}
 			DB::commit();
 			return redirect()->route('perfis.index')->with('success',trans('messages.update'));
@@ -153,6 +149,9 @@ class PerfilController extends Controller {
 		DB::beginTransaction();
 		try{
 			$role = TbPerfil::findOrFail($id);
+			if($role->ds_nome === 'Administrador'){
+				throw new CustomException("O perfil 'Administrador' não pode ser excluido.",0,'warning');
+			}
 			$role->delete();
 			DB::commit();
 			return redirect()->route('perfis.index')->with('success',trans('messages.destroy'));

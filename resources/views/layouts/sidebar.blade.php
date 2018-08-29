@@ -43,7 +43,7 @@
                   @foreach($item['children'] as $subitem)
                     @if(count($subitem))
                       <li class="nav-item">
-                        <a href="{{ route($subitem['routeName']) }}" class="nav-link">
+                        <a href="{{ route($subitem['routeName']) }}" class="nav-link{{ ( $subitem['routeName'] == Route::currentRouteName() ? ' active' : '' ) }}">
                           @if(isset($subitem['icon-left']))
                             <i class="{{ $subitem['icon-left'] }}"></i>
                           @endif
@@ -66,3 +66,23 @@
   <!-- /.sidebar-menu -->
 </div>
 <!-- /.sidebar -->
+
+@push('js')
+  <script>
+    $(function(){
+      
+      $.each($('ul.nav-sidebar li'), function( index, element ) {
+        if( $(element).hasClass("has-treeview") ){
+          var subitens = $(element).find('ul.nav-treeview li a');
+          $.each(subitens, function( index, subelement ) {
+            if( $(subelement).hasClass('active') ){
+              $(element).children().addClass('active');
+              $(element).addClass('menu-open');
+            }
+          });
+        }
+      });
+      
+    });
+  </script>
+@endpush

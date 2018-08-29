@@ -9,14 +9,8 @@ use App\Models\TbPermissao;
 use Yajra\Datatables\Datatables;
 use DB;
 
-class PermissaoController extends Controller {
-
-	public function __construct() {
-		$this->middleware([
-			//'auth', 
-			//'isAdmin'
-		]); //isAdmin middleware lets only users with a //specific permission permission to access these resources
-	}
+class PermissaoController extends Controller
+{
 
 	/**
 	* Display a listing of the resource.
@@ -153,12 +147,6 @@ class PermissaoController extends Controller {
 		DB::beginTransaction();
 		try{
 			$permission = TbPermissao::findOrFail($id);
-			//Make it impossible to delete this specific permission 
-			if ($permission->ds_nome == "Administer roles & permissions") {
-				return redirect()->route('permissoes.index')
-				->with('flash_message',
-				'Cannot delete this Permission!');
-			}
 			$permission->delete();
 			DB::commit();
 			return redirect()->route('permissoes.index')

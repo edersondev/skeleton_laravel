@@ -19,10 +19,14 @@ Route::group(['middleware' => 'auth'], function() {
   })->name('default');
   Route::get('/home', 'HomeController@index')->name('home');
 
-  Route::resource('usuarios', 'UsuarioController');
-  Route::match(['get','post'],'usuarios/jsonlista','UsuarioController@jsonLista')->name('usuarios.jsonlista');
-  Route::resource('perfis', 'PerfilController');
-  Route::match(['get','post'],'perfis/jsonlista','PerfilController@jsonlista')->name('perfis.jsonlista');
-  Route::resource('permissoes', 'PermissaoController');
-  Route::match(['get','post'],'permissoes/jsonlista','PermissaoController@jsonlista')->name('permissoes.jsonlista');
+  // Rotas acessiveis somente para o perfil Administrador
+  Route::group(['middleware' => 'isAdmin'], function() {
+    Route::resource('usuarios', 'UsuarioController');
+    Route::match(['get','post'],'usuarios/jsonlista','UsuarioController@jsonLista')->name('usuarios.jsonlista');
+    Route::resource('perfis', 'PerfilController');
+    Route::match(['get','post'],'perfis/jsonlista','PerfilController@jsonlista')->name('perfis.jsonlista');
+    Route::resource('permissoes', 'PermissaoController');
+    Route::match(['get','post'],'permissoes/jsonlista','PermissaoController@jsonlista')->name('permissoes.jsonlista');
+  });
+  
 });
