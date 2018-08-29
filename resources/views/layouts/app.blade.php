@@ -101,7 +101,6 @@
     <script src="{{ URL::asset('components/adminlte/dist/js/adminlte.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ URL::asset('components/adminlte/dist/js/demo.js') }}"></script>
-    <script src="{{ URL::asset('js/custom.js') }}"></script>
     @stack('js')
 
   </body>

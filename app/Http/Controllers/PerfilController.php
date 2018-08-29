@@ -7,6 +7,7 @@ use App\Exceptions\CustomException;
 
 use App\Models\TbPerfil;
 use App\Models\TbPermissao;
+use Yajra\Datatables\Datatables;
 use DB;
 
 class PerfilController extends Controller {
@@ -27,6 +28,11 @@ class PerfilController extends Controller {
 		$roles = TbPerfil::all();
 		return view('perfis.index')->with('roles', $roles);
 	}
+
+	public function jsonLista()
+  {
+    return Datatables::of(TbPerfil::query())->make(true);
+  }
 
 	/**
 	 * Show the form for creating a new resource.

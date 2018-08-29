@@ -56,7 +56,7 @@
 </div>
 
 {{-- Componente de Modal: views/components/bootstrap/modal_confirm --}}
-@modal_confirm()
+@modal_confirm(['modal_id' => 'user_delete'])
 	{{ trans('messages.confirm_destroy') }}
 @endmodal_confirm
 
@@ -93,19 +93,27 @@
 					},
 					{
 						data: 'co_seq_usuario',
+						width: '15%',
 						searchable: false,
 						orderable: false,
 						render: function(data,type,full,meta){
-							var url_edit = `{!! route('usuarios.index') !!}/${data}/edit`;
-							var form_action = `{!! route('usuarios.index') !!}/${data}`;
-							var form_name = `deluser-${data}`;
-							return dataTablesFormDestroy(url_edit,form_name,form_action);
+							return `
+								<form name="deluser-${data}" id="deluser-${data}" action="{!! route('usuarios.index') !!}/${data}" method="post">
+									{!! csrf_field() !!}
+									{!! method_field('DELETE') !!}
+									<a class="btn btn-primary btn-sm" href="{!! route('usuarios.index') !!}/${data}/edit" role="button">
+										<i class="fas fa-edit"></i> Editar
+									</a>
+									<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#user_delete">
+										<i class="fas fa-trash-alt"></i> Deletar
+									</button>
+								</form>
+							`;
+							}
 						}
-					}
-				]
-			});
-			
+					]
+				});
 		});
-
+  
 	</script>
 @endpush

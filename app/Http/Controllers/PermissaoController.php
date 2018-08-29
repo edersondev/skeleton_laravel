@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\CustomException;
 use App\Models\TbPerfil;
 use App\Models\TbPermissao;
-
+use Yajra\Datatables\Datatables;
 use DB;
 
 class PermissaoController extends Controller {
@@ -27,6 +27,11 @@ class PermissaoController extends Controller {
 		$permissions = TbPermissao::all();
 		return view('permissoes.index')->with('permissions', $permissions);
 	}
+
+	public function jsonLista()
+  {
+    return Datatables::of(TbPermissao::query())->make(true);
+  }
 
 	/**
 	* Show the form for creating a new resource.
