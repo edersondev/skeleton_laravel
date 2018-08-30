@@ -93,7 +93,6 @@ class UsuarioController extends Controller
   public function edit($id)
   {
     $user = TbUsuario::findOrFail($id);
-    //dd($user);
 		$roles = TbPerfil::get();
     $usuario_perfis = $user->roles()->pluck('co_perfil')->toarray();
 		return view('usuarios.create', compact('user', 'roles','usuario_perfis'));

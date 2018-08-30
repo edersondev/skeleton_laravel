@@ -114,6 +114,9 @@ class PerfilController extends Controller
 		DB::beginTransaction();
 		try{
 			$role = TbPerfil::findOrFail($id);
+			if($role->ds_nome === 'Administrador'){
+				throw new CustomException("O perfil 'Administrador' não pode ser editado.",0,'warning');
+			}
 			$input = $request->except(['permissions']);
 			$role->fill($input)->save();
 
