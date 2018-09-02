@@ -50,9 +50,11 @@
 </div>
 
 {{-- Componente de Modal: views/components/bootstrap/modal_confirm --}}
-@modal_confirm(['modal_id' => 'perfil_delete'])
-	{{ trans('messages.confirm_destroy') }}
-@endmodal_confirm
+{{ Form::open(['route' => 'perfis.index','id'=>'deletar','method'=>'DELETE']) }}
+	@modal_confirm(['modal_id' => 'perfil_delete'])
+		{{ trans('messages.confirm_destroy') }}
+	@endmodal_confirm
+{{ Form::close() }}
 
 @endsection
 
@@ -80,16 +82,12 @@
 						orderable: false,
 						render: function(data,type,full,meta){
 							return `
-								<form name="delperfil-${data}" id="delperfil-${data}" action="{!! route('perfis.index') !!}/${data}" method="post">
-									{!! csrf_field() !!}
-									{!! method_field('DELETE') !!}
-									<a class="btn btn-primary btn-sm" href="{!! route('perfis.index') !!}/${data}/edit" role="button">
-										<i class="fas fa-edit"></i> Editar
-									</a>
-									<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#perfil_delete">
-										<i class="fas fa-trash-alt"></i> Deletar
-									</button>
-								</form>
+								<a class="btn btn-primary btn-sm" href="{!! route('perfis.index') !!}/${data}/edit" role="button">
+									<i class="fas fa-edit"></i> Editar
+								</a>
+								<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#perfil_delete" data-row="${data}">
+									<i class="fas fa-trash-alt"></i> Deletar
+								</button>
 							`;
 						}
 					}

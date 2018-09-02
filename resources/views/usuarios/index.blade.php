@@ -56,9 +56,11 @@
 </div>
 
 {{-- Componente de Modal: views/components/bootstrap/modal_confirm --}}
-@modal_confirm(['modal_id' => 'user_delete'])
-	{{ trans('messages.confirm_destroy') }}
-@endmodal_confirm
+{{ Form::open(['route' => 'usuarios.index','id'=>'deletar','method'=>'DELETE']) }}
+	@modal_confirm(['modal_id' => 'confirmar_deletar'])
+		{{ trans('messages.confirm_destroy') }}
+	@endmodal_confirm
+{{ Form::close() }}
 
 @endsection
 
@@ -98,16 +100,12 @@
 						orderable: false,
 						render: function(data,type,full,meta){
 							return `
-								<form name="deluser-${data}" id="deluser-${data}" action="{!! route('usuarios.index') !!}/${data}" method="post">
-									{!! csrf_field() !!}
-									{!! method_field('DELETE') !!}
-									<a class="btn btn-primary btn-sm" href="{!! route('usuarios.index') !!}/${data}/edit" role="button">
-										<i class="fas fa-edit"></i> Editar
-									</a>
-									<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#user_delete">
-										<i class="fas fa-trash-alt"></i> Deletar
-									</button>
-								</form>
+								<a class="btn btn-primary btn-sm" href="{!! route('usuarios.index') !!}/${data}/edit" role="button">
+									<i class="fas fa-edit"></i> Editar
+								</a>
+								<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmar_deletar" data-row="${data}">
+									<i class="fas fa-trash-alt"></i> Deletar
+								</button>
 							`;
 							}
 						}

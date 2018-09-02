@@ -15,7 +15,7 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           <i class="fa fa-times"></i> Cancelar
         </button>
-        <button type="button" class="btn btn-primary confirm-submit" data-form="">
+        <button type="{{ ( isset($confirm) ? $confirm : 'submit' ) }}" class="btn btn-primary confirm-submit">
           <i class="fas fa-check"></i> Sim
         </button>
       </div>
@@ -28,16 +28,12 @@
     $(function(){
       $('#{{ isset($modal_id) ? $modal_id : 'exampleModal' }}').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget),
-            form = button.parent(),
-            modal = $(this);
-        modal.find('.modal-footer button.confirm-submit').attr('data-form',form.attr('id'));
+            row_id = button.attr('data-row'),
+            modal = $(this),
+            form = modal.parent('form');
+            action = form.attr('action');
+        form.attr('action',`${action}/${row_id}`)
       });
-
-      $('.confirm-submit').on('click',function(){
-        var form_id = $(this).attr('data-form');
-        $("form#" + form_id).submit();
-      });
-
     });
   </script>
 @endpush

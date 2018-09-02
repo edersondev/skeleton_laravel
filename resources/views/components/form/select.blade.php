@@ -1,9 +1,27 @@
-<div class="form-group{{ $errors->has($name) ? ' has-error' : '' }}">
-    {{ Form::label($name, $label, ['class' => 'control-label']) }} {!! ( isset($attributes['required']) ? '<span class="asteriskField">*</span>' : '' ) !!}
-    {{ Form::select($name, $arrOptions, $value, ( isset($attributes) ? array_merge( ['class' => 'form-control'], $attributes ) : ['class' => 'form-control'] ) ) }}
-    @if ($errors->has($name))
-        <span class="help-block">
-            <strong>{{ $errors->first($name) }}</strong>
-        </span>
-    @endif
+<div class="form-group">
+	@if($label)
+		{{ Form::label($name, $label) }} {!! ( !isset($attributes['required']) ? '<small class="text-muted"> (opcional)</small>' : '' ) !!}
+	@endif
+
+	@php
+		$classErrorInput = ( $errors->has($name) ? ' is-invalid' : '' );
+		$classInput = "form-control{$classErrorInput}";
+		if($helpText){
+			$attributes['aria-describedby'] = "{$name}HelpBlock";
+		}
+	@endphp
+
+	{{ Form::select($name, $arrOptions, $value, ( isset($attributes) ? array_merge( ['class' => $classInput], $attributes ) : ['class' => $classInput] ) ) }}
+	@if ($errors->has($name))
+		<div class="invalid-feedback">
+			<strong>{{ $errors->first($name) }}</strong>
+		</div>
+	@endif
+
+	@if($helpText and !$errors->has($name))
+		<small id="{{$name}}HelpBlock" class="form-text text-muted">
+			{!! $helpText !!}
+		</small>
+	@endif
+
 </div>

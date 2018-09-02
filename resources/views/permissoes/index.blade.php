@@ -50,9 +50,11 @@
 </div>
 
 {{-- Componente de Modal: views/components/bootstrap/modal_confirm --}}
-@modal_confirm(['modal_id' => 'permissao_delete'])
-	{{ trans('messages.confirm_destroy') }}
-@endmodal_confirm
+{{ Form::open(['route' => 'permissoes.index','id'=>'deletar','method'=>'DELETE']) }}
+	@modal_confirm(['modal_id' => 'permissao_delete'])
+		{{ trans('messages.confirm_destroy') }}
+	@endmodal_confirm
+{{ Form::close() }}
 
 @endsection
 
@@ -80,16 +82,12 @@
 						orderable: false,
 						render: function(data,type,full,meta){
 							return `
-								<form name="delpermissao-${data}" id="delpermissao-${data}" action="{!! route('permissoes.index') !!}/${data}" method="post">
-									{!! csrf_field() !!}
-									{!! method_field('DELETE') !!}
-									<a class="btn btn-primary btn-sm" href="{!! route('permissoes.index') !!}/${data}/edit" role="button">
-										<i class="fas fa-edit"></i> Editar
-									</a>
-									<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#permissao_delete">
-										<i class="fas fa-trash-alt"></i> Deletar
-									</button>
-								</form>
+								<a class="btn btn-primary btn-sm" href="{!! route('permissoes.index') !!}/${data}/edit" role="button">
+									<i class="fas fa-edit"></i> Editar
+								</a>
+								<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#permissao_delete" data-row="${data}">
+									<i class="fas fa-trash-alt"></i> Deletar
+								</button>
 							`;
 						}
 					}

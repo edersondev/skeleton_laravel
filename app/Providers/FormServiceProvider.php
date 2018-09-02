@@ -15,7 +15,7 @@ class FormServiceProvider extends ServiceProvider
   public function boot()
   {
     Form::component('bsText', 'components.form.text', ['name', 'label', 'value', 'helpText', 'attributes']);
-    Form::component('bsSelect', 'components.form.select', ['name', 'label', 'arrOptions', 'value', 'attributes']);
+    Form::component('bsSelect', 'components.form.select', ['name', 'label', 'arrOptions', 'value','helpText', 'attributes']);
     Form::component('bsCheckbox', 'components.form.checkbox', ['name', 'label', 'value', 'checked','attributes']);
     Form::component('bsTitaCheckbox', 'components.form.titacheckbox', ['name', 'label', 'value', 'checked','attributes']);
     Form::component('bsTextArea', 'components.form.textarea', ['name', 'label', 'value','helpText', 'attributes']);
