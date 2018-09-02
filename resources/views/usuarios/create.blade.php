@@ -38,9 +38,6 @@
 								@endphp
 								{{ Form::bsPassword('password','Senha',$helpTextPassword) }}
 								{{ Form::bsPassword('password_confirmation',' Confirmar Senha') }}
-
-								{{ Form::bsSelect('select','Teste',['L' => 'Large', 'S' => 'Small'],null,'texto de ajuda',['placeholder'=>'Selecione o item']) }}
-
 								{{ Form::bsTitaCheckbox('st_ativo','Usuário ativo?',1,( isset($user->st_ativo) ? $user->st_ativo : 0 )) }}
 							</div>
 						</div>
