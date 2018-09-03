@@ -4,7 +4,7 @@
 
 <div class="form-check checkbox-slider-md checkbox-slider--a checkbox-slider-primary">
   <label>
-    {{ Form::checkbox($name, $value, ( $checked == 1 ? true : false ),$attributes) }}
+    {{ Form::checkbox($name, $value, (boolean)$checked, $attributes) }}
     <span class="{{$classErrorInput}}">{{ $label }}</span>
   </label>
 

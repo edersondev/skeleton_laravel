@@ -1,4 +1,5 @@
-.custom-checkbox label.custom-control-label{
+.custom-checkbox label.custom-control-label,
+.custom-radio label.custom-control-label{
   position: static;
 }
 

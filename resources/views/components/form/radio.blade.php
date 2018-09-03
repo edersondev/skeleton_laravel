@@ -1,22 +1,15 @@
-<div class="form-group{{ $errors->has($name) ? ' has-error' : '' }}">
-    {{ Form::label(null, $label, ['class' => 'control-label']) }} {!! ( isset($attributes['required']) ? '<span class="asteriskField">*</span>' : '' ) !!}
-    @if ( count($arrOptions) > 0 )
-        @foreach( $arrOptions as $option )
-        <div class="radio">
-            <label>
-                @if ( isset($value) && $value == $option->id )
-                    {{ Form::radio($name,$option->id,true) }}
-                @else
-                    {{ Form::radio($name,$option->id) }}
-                @endif
-                {{ $option->name }}
-            </label>
-        </div>
-        @endforeach
-    @endif
-    @if ($errors->has($name))
-        <span class="help-block">
-            <strong>{{ $errors->first($name) }}</strong>
-        </span>
-    @endif
+@php
+	$classErrorInput = ( $errors->has($name) ? ' is-invalid' : '' );
+	$classInput = "custom-control-input{$classErrorInput}";
+	$inputAttributes = isset($attributes) ? array_merge( ['class' => $classInput], $attributes ) : ['class' => $classInput];
+	$attrFor = ( isset($attributes['id']) ? $attributes['id'] : $name );
+@endphp
+<div class="custom-control custom-radio">
+	{{ Form::radio($name, $value, (boolean)$checked ,$inputAttributes) }}
+	{{ Form::label($attrFor, $label, ['class' => 'custom-control-label']) }}
+	@if ($errors->has($name))
+		<div class="invalid-feedback">
+			{{ $errors->first($name) }}
+		</div>
+	@endif
 </div>
