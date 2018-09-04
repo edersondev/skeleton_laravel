@@ -1,16 +1,17 @@
 <div class="form-group">
 	@if($label)
-		{{ Form::label($name, $label, ['class' => 'control-label']) }} {!! ( isset($attributes['required']) ? '<span class="asteriskField">*</span>' : '' ) !!}
+		{{ Form::label($name, $label) }} {!! ( !isset($attributes['required']) ? '<small class="text-muted"> (opcional)</small>' : '' ) !!}
 	@endif
 
 	@php
 		$classErrorInput = ( $errors->has($name) ? ' is-invalid' : '' );
+		$classInput = "form-control{$classErrorInput}";
 		if($helpText){
 			$attributes['aria-describedby'] = "{$name}HelpBlock";
 		}
 	@endphp
 
-	{{ Form::email($name, $value, ( isset($attributes) ? array_merge( ['class' => "form-control{$classErrorInput}"], $attributes ) : ['class' => "form-control{$classErrorInput}"] ) ) }}
+	{{ Form::email($name, $value, ( isset($attributes) ? array_merge( ['class' => $classInput], $attributes ) : ['class' => "form-control{$classErrorInput}"] ) ) }}
 	
 	@if ($errors->has($name))
 		<div class="invalid-feedback">

@@ -30,14 +30,15 @@
 								<i class="fas fa-address-card"></i> Dados do usuário
 							</div>
 							<div class="card-body">
-								{{ Form::bsText('ds_nome','Nome') }}
-								{{ Form::bsEmail('email','Email') }}
+								{{ Form::bsText('ds_nome','Nome',null,null,['required'=>true]) }}
+								{{ Form::bsEmail('email','Email',null,null,['required'=>true]) }}
 								
 								@php
-									$helpTextPassword = ( Route::currentRouteName() === 'usuarios.create' ? null : 'Deixe o campo em branco para manter a mesma senha.' );		
+									$helpTextPassword = ( Route::currentRouteName() === 'usuarios.create' ? null : 'Deixe o campo em branco para manter a mesma senha.' );
+									$attrPassword = ( Route::currentRouteName() === 'usuarios.create' ? ['required'=>true] : null );
 								@endphp
-								{{ Form::bsPassword('password','Senha',$helpTextPassword) }}
-								{{ Form::bsPassword('password_confirmation',' Confirmar Senha') }}
+								{{ Form::bsPassword('password','Senha',$helpTextPassword,$attrPassword) }}
+								{{ Form::bsPassword('password_confirmation',' Confirmar Senha',null,$attrPassword) }}
 								{{ Form::bsTitaCheckbox('st_ativo','Usuário ativo?',1,( isset($user->st_ativo) ? $user->st_ativo : 0 )) }}
 							</div>
 						</div>
