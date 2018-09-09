@@ -1,4 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.error')
+
+@push('css')
+  <link rel="stylesheet" href="{{ URL::asset('css/errors/error_404.css') }}">
+@endpush
 
 @section('title')
   <i class="fas fa-exclamation-triangle text-warning"></i> Oops! Página não encontrada.
@@ -7,11 +11,10 @@
 @section('content')
 
 <div class="error-page">
-  <h2 class="headline text-warning"> 404</h2>
 
   <div class="error-content">
     <p>
-      A página procurada não pode ser encontrada, você pode <a href="{{ route('default') }}">retornar para a página do painel</a>.
+      A página pode ter mudado de nome ou nunca ter existido.
     </p>
 
     @if (env('APP_DEBUG') === true)
@@ -19,9 +22,27 @@
     @endif
 
   </div>
-
-  
-
 </div>
 
 @endsection
+
+@push('js')
+<script>
+  function random() {
+    var radom = Math.floor(Math.random() * 16) + 1,
+    pathGifs = "{{ asset('gifs') }}";
+    $('body').css('background-image', `url(${pathGifs}/gif-${radom}.gif)`);
+  }
+
+  $(function(){
+    random();
+
+    $('body').keyup(function(e){
+      if(e.keyCode == 32){
+        random();
+      }
+    });
+
+  });
+</script>
+@endpush

@@ -24,8 +24,8 @@ class FormServiceProvider extends ServiceProvider
     Form::component('bsEmail','components.form.email', ['name','label','value', 'helpText','attributes']);
     Form::component('bsPassword','components.form.password',['name','label','helpText','attributes']);
     Form::component('bsRadio','components.form.radio',['name','label','value','checked','attributes']);
-    Form::component('bsDatepicker','components.form.datepicker',['name','label','value','attributes']);
-    Form::component('bsNumber', 'components.form.number', ['name', 'label', 'value', 'attributes']);
+    Form::component('bsDatepicker','components.form.datepicker',['name','label','value', 'helpText','attributes']);
+    Form::component('bsNumber', 'components.form.number', ['name', 'label', 'value', 'helpText', 'attributes']);
   }
 
   /**
