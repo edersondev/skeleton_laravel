@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\TbPerfil;
+use App\Models\TbUsuario;
 
 class InitialDataSeeder extends Seeder
 {
