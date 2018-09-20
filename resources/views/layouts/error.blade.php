@@ -16,16 +16,20 @@
 		<link rel="stylesheet" href="{{ URL::asset('css/errors/error.css') }}">
 		@stack('css')
 
-		<!-- Google Font: Source Sans Pro -->
-		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-
 		<link href="{{ URL::asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
 
 	</head>
 	<body>
 
-		<div class="container text-center">
+		{{-- <div class="container">
 			<h1>@yield('title','Título da página')</h1>
+			@yield('content')
+		</div> --}}
+		<div class="overlay"></div>
+		<div class="terminal">
+			@hasSection('title')
+				<h1>@yield('title','Título da página')</h1>
+			@endif
 			@yield('content')
 		</div>
 
