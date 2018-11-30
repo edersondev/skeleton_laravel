@@ -7,6 +7,9 @@ use App\Exceptions\CustomException;
 use App\Models\TbUsuario;
 use App\Models\TbPerfil;
 use Yajra\Datatables\Datatables;
+use App\Http\Requests\UsuarioRequest;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
 use DB;
 
 class UsuarioController extends Controller
@@ -45,13 +48,12 @@ class UsuarioController extends Controller
   * @param  \Illuminate\Http\Request  $request
   * @return \Illuminate\Http\Response
   */
-  public function store(Request $request)
-  {
-    $this->validateUsuario($request);
-    
+  public function store(UsuarioRequest $request)
+  { 
     DB::beginTransaction();
     try {
-      $user = TbUsuario::create($request->only('email', 'ds_nome', 'password'));
+      $input = $request->only((new TbUsuario)->getFillable());
+      $user = TbUsuario::create($input);
       $roles = $request['roles'];
       if (isset($roles)) {
         foreach ($roles as $role) {
@@ -59,6 +61,8 @@ class UsuarioController extends Controller
           $user->assignRole($role_r);
         }
       }
+
+      $this->storeImage($request, $user->co_seq_usuario);
 
       DB::commit();
 
@@ -105,18 +109,12 @@ class UsuarioController extends Controller
   * @param  int  $id
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request, $id)
+  public function update(UsuarioRequest $request, $id)
   {
-    $this->validateUsuario($request,true,$id);
-
     DB::beginTransaction();
     try {
       $user = TbUsuario::findOrFail($id);
-      $input = $request->only(['ds_nome', 'email', 'password','st_ativo']);
-      $input['st_ativo'] = ( isset($input['st_ativo']) && $input['st_ativo'] == 1 ? true : false );
-      if(is_null($input['password'])){
-        unset($input['password']);
-      }
+      $input = $request->only((new TbUsuario)->getFillable());
       $user->fill($input)->save();
 
       $roles = $request['roles'];
@@ -126,9 +124,11 @@ class UsuarioController extends Controller
         $user->roles()->detach();
       }
 
+      $this->storeImage($request, $id);
+
       DB::commit();
 
-      return redirect()->route('usuarios.index')
+      return redirect()->route('usuarios.edit',$id)
         ->with('success', trans('messages.update'));
       } catch(CustomException $e) {
         DB::rollBack();
@@ -165,21 +165,44 @@ class UsuarioController extends Controller
 			return redirect()->back()
 				->with($e->getTypeMessage(), $e->getMessage());
     }
-		
   }
 
-	private function validateUsuario($request, $update = false, $id = null)
-	{
-		$rules = [
-			'ds_nome'=>'required|max:120',
-		  'email'=>'required|email|unique:tb_usuario'
-    ];
-    if(!empty($request['password'])){
-      $rules['password'] = 'required|min:6|confirmed';
+  public function destroyImg($id)
+  {
+    $objUsuario = TbUsuario::findOrFail($id);
+    Storage::delete($objUsuario->img_profile);
+    $objUsuario->fill(['img_profile'=>null])->save();
+    return redirect()->route('usuarios.edit',$id)
+      ->with('success', trans('messages.destroy_image'));
+  }
+
+  private function storeImage($request, $id)
+  {
+    $objUsuario = TbUsuario::findOrFail($id);
+    if( $request->img_profile ) {
+      if($objUsuario->img_profile){
+        Storage::delete($objUsuario->img_profile);
+      }
+      $arrData = ['img_profile' => $request->file('img_profile')->store('public/img_profile')];
+      $objUsuario->fill($arrData)->save();
     }
-		if($update){
-			$rules['email'] = "required|email|unique:tb_usuario,email,{$id},co_seq_usuario";
-		}
-		$this->validate($request, $rules);
-	}
+  }
+
+  private function resizeImage($image)
+  {
+    $fullPath = storage_path("app/{$image}");
+    $newSize = 200;
+    
+    $img = ImageManager::make($fullPath);
+    $img->resize(null, $newSize, function ($constraint) {
+      $constraint->aspectRatio();
+    });
+    $background = ImageManager::canvas($newSize, $newSize);
+    $image_resized = $img->resize($newSize, $newSize, function ($c) {
+      $c->aspectRatio();
+      $c->upsize();
+    });
+    $background->insert($image_resized, 'center');
+    $background->save($fullPath);
+  }
 }

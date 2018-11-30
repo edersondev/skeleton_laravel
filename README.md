@@ -7,8 +7,8 @@ Skeleton system laravel
 - php artisan key:generate
 - Configure o arquivo .env para conexão com o banco de dados
 - php artisan migrate
-- php artisan db:seed --class=InitialDataSeeder
-- php artisan vendor:publish
+- php artisan db:seed
+- php artisan vendor:publish --tag=app_assets
 - php artisan storage:link
 - chown www-data.www-data -R bootstrap/ storage/
 

@@ -64,6 +64,7 @@
         "eternicode/bootstrap-datepicker": "^1.8",
         "fideloper/proxy": "^4.0",
         "igorescobar/jquery-mask-plugin": "^1.14",
+        "intervention/image": "^2.4",
         "kleinejan/titatoggle": "master",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",

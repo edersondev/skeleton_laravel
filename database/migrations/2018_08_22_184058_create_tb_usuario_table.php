@@ -16,6 +16,7 @@ class CreateTbUsuarioTable extends Migration {
 			$table->string('password');
 			$table->boolean('st_ativo')->default(false);
 			$table->string('ds_relembrar_token', 100)->nullable();
+			$table->string('img_profile')->nullable();
 			$table->timestamp('dt_inclusao')->nullable();
 			$table->timestamp('dt_atualizacao')->nullable();
 			$table->timestamp('dt_exclusao')->nullable();

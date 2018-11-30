@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth'], function() {
   Route::group(['middleware' => 'isAdmin'], function() {
     Route::resource('usuarios', 'UsuarioController');
     Route::match(['get','post'],'usuarios/jsonlista','UsuarioController@jsonLista')->name('usuarios.jsonlista');
+    Route::get('usuario/destroy-img/{id}','UsuarioController@destroyImg')->name('usuario.destroyimg');
     Route::resource('perfis', 'PerfilController');
     Route::match(['get','post'],'perfis/jsonlista','PerfilController@jsonlista')->name('perfis.jsonlista');
     Route::resource('permissoes', 'PermissaoController');
