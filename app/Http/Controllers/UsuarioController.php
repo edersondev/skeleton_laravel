@@ -9,7 +9,7 @@ use App\Models\TbPerfil;
 use Yajra\Datatables\Datatables;
 use App\Http\Requests\UsuarioRequest;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
+use Intervention\Image\ImageManagerStatic as Image;
 use DB;
 
 class UsuarioController extends Controller
@@ -183,7 +183,9 @@ class UsuarioController extends Controller
       if($objUsuario->img_profile){
         Storage::delete($objUsuario->img_profile);
       }
-      $arrData = ['img_profile' => $request->file('img_profile')->store('public/img_profile')];
+      $file = $request->img_profile->store('public/img_profile');
+      $this->resizeImage($file);
+      $arrData = ['img_profile' => $file];
       $objUsuario->fill($arrData)->save();
     }
   }
@@ -191,13 +193,13 @@ class UsuarioController extends Controller
   private function resizeImage($image)
   {
     $fullPath = storage_path("app/{$image}");
-    $newSize = 200;
+    $newSize = 250;
     
-    $img = ImageManager::make($fullPath);
+    $img = Image::make($fullPath);
     $img->resize(null, $newSize, function ($constraint) {
       $constraint->aspectRatio();
     });
-    $background = ImageManager::canvas($newSize, $newSize);
+    $background = Image::canvas($newSize, $newSize);
     $image_resized = $img->resize($newSize, $newSize, function ($c) {
       $c->aspectRatio();
       $c->upsize();

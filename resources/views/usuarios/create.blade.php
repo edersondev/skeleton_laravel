@@ -45,7 +45,7 @@
 								</div>
 
 								@if( Route::currentRouteName() === 'usuarios.edit' && !is_null($user->img_profile) )
-									<div class="card mx-auto d-block" style="width: 18rem;">
+									<div class="card mx-auto d-block" style="max-width: 18rem;">
 										<img src="{{ Storage::url($user->img_profile) }}" alt="Imagem Perfil" class="card-img-top">
 										<div class="card-body text-right">
 											<a class="btn btn-danger btn-sm" href="{{ route('usuario.destroyimg',$user->co_seq_usuario) }}" role="button">
@@ -103,7 +103,7 @@
 
 @if( Route::currentRouteName() === 'usuarios.edit' && !is_null($user->img_profile) )
 	@component('components.bootstrap.modal',['title'=>'Zoom','modal_id'=>'zoom_image','size'=>'large'])
-			<img src="{{ Storage::url($user->img_profile) }}" alt="Imagem Perfil" class="img-thumbnail" />
+			<img src="{{ Storage::url($user->img_profile) }}" alt="Imagem Perfil" class="img-thumbnail mx-auto d-block" />
 
 		@slot('modal_footer')
 			<button type="button" class="btn btn-secondary" data-dismiss="modal">
