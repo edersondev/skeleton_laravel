@@ -4,8 +4,18 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36aebf87b346d3d50c46a6eb0b503b9a",
+    "content-hash": "df0b613deac9cb93d1d6bfbb122ff197",
     "packages": [
+        {
+            "name": "FezVrasta/popper.js",
+            "version": "1.14.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FezVrasta/popper.js",
+                "reference": "b1144cd"
+            },
+            "type": "library"
+        },
         {
             "name": "FortAwesome/Font-Awesome",
             "version": "5.6.3",

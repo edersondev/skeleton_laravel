@@ -52,6 +52,18 @@
                     "reference": "master"
                 }
             }
+        },
+        "popper":{
+            "type": "package",
+            "package":{
+                "name": "FezVrasta/popper.js",
+                "version": "1.14.6",
+                "source": {
+                    "url": "https://github.com/FezVrasta/popper.js",
+                    "type": "git",
+                    "reference": "b1144cd"
+                }
+            }
         }
     },
     "require": {
@@ -72,7 +84,8 @@
         "phstc/jquery-dateFormat": "master",
         "spatie/laravel-permission": "^2.12",
         "twbs/bootstrap": "4.1.1",
-        "yajra/laravel-datatables-oracle": "^8.8"
+        "yajra/laravel-datatables-oracle": "^8.8",
+        "FezVrasta/popper.js": "1.14.6"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

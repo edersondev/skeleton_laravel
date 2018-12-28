@@ -10,7 +10,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ URL::asset('components/bootstrap/dist/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ URL::asset('components/fortawesome/web-fonts-with-css/css/fontawesome-all.min.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('components/fortawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('components/adminlte/dist/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}">
     @stack('css')
@@ -39,7 +39,7 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- jQuery -->
     <script src="{{ URL::asset('components/jquery/jquery.min.js') }}" ></script>
-    <script src="{{ URL::asset('components/popper/dist/umd/popper.min.js') }}"></script>
+    <script src="{{ URL::asset('components/popper/umd/popper.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ URL::asset('components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     @stack('js')

@@ -25,6 +25,7 @@ class AssetsServiceProvider extends ServiceProvider
 			base_path('vendor/FortAwesome/Font-Awesome')        => public_path('components/fortawesome'),
 			base_path('vendor/kleinejan/titatoggle/dist')       => public_path('components/titatoggle'),
 			base_path('vendor/phstc/jquery-dateFormat/dist')    => public_path('components/jquery-dateFormat'),
+			base_path('vendor/FezVrasta/popper.js/dist')    => public_path('components/popper'),
 		],'app_assets');
 	}
 
