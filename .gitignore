@@ -14,3 +14,4 @@ yarn-error.log
 /components
 /public/components
 /resources/views/vendor
+composer.lock
