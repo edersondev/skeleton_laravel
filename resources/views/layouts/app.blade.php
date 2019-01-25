@@ -102,7 +102,6 @@
     <script src="{{ URL::asset('components/adminlte/dist/js/adminlte.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ URL::asset('components/adminlte/dist/js/demo.js') }}"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     @stack('js')
 
   </body>

@@ -34,3 +34,17 @@ if (! function_exists('get_action_page')) {
 		return ( $action[1] === 'create' ? 'Adicionar' : 'Atualizar' );
 	}
 }
+
+if (! function_exists('convertDate')) {
+  function convertDate($strDate, $format = '') {
+    if ( is_null($strDate) ) {
+      return null;
+    }
+    $date = str_replace('/', '-', $strDate);
+    $carbon = new Carbon\Carbon($date);
+    if (!empty($format)) {
+      return $carbon->format($format);
+    }
+    return $carbon->toDateTimeString();
+  }
+}

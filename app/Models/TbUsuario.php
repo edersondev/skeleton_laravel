@@ -205,14 +205,4 @@ class TbUsuario extends Authenticatable
 		return $this->permissions->contains('co_seq_permissao', $permission->co_seq_permissao);
 	}
 
-	public function papeis()
-	{
-		return $this->hasMany('App/Models\TaModelPapeis', 'model_id');
-	}
-
-	public function permissoes()
-	{
-		return $this->hasMany('App/Models\TaModelPermissoes', 'co_permissao');
-	}
-
 }

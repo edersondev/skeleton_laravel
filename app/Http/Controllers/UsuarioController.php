@@ -22,13 +22,38 @@ class UsuarioController extends Controller
   */
   public function index()
   {
-		$users = TbUsuario::all(); 
-		return view('usuarios.index')->with('users', $users);
+    $arrPerfil = TbPerfil::pluck('ds_nome','co_seq_perfil')->toarray();
+		return view('usuarios.index',compact('arrPerfil'));
   }
 
-  public function jsonLista()
+  public function jsonLista(Request $request)
   {
-    return Datatables::of(TbUsuario::query())->make(true);
+    $searchInput = [];
+    if ( $request->has('search') && !is_null($request->search['value']) ) {
+      parse_str($request->search['value'], $searchInput);
+    }
+    $objUsuario = TbUsuario::query()->with('roles');
+    return Datatables::of($objUsuario)
+      ->filter(function($query) use ($searchInput){
+        if(!empty($searchInput['ds_nome'])){
+          $query->where('tb_usuario.ds_nome','ilike',"%{$searchInput['ds_nome']}%");
+        }
+        if(!empty($searchInput['email'])){
+          $query->where('tb_usuario.email',$searchInput['email']);
+        }
+        if(!empty($searchInput['st_ativo'])){
+          $st_ativo = ( $searchInput['st_ativo'] == 1 ? true : false );
+          $query->where('tb_usuario.st_ativo',$st_ativo);
+        }
+        if(!empty($searchInput['dt_inclusao'])){
+          $query->where('tb_usuario.dt_inclusao','>=',convertDate($searchInput['dt_inclusao'],'Y-m-d') . ' 00:00:00');
+          $query->where('tb_usuario.dt_inclusao','<=',convertDate($searchInput['dt_inclusao'],'Y-m-d') . ' 23:59:59');
+        }
+        // if(!empty($searchInput['co_perfil'])){
+        //   $query->roles()->where('tb_perfil.co_seq_perfil',$searchInput['co_perfil']);
+        // }
+      })
+      ->make(true);
   }
 
   /**
@@ -165,6 +190,43 @@ class UsuarioController extends Controller
 			return redirect()->back()
 				->with($e->getTypeMessage(), $e->getMessage());
     }
+  }
+
+  public function destroyList(Request $request)
+  {
+    $request->validate([
+      'co_usuario' => 'required|array',
+      'co_usuario.*' => 'integer'
+    ]);
+
+    DB::beginTransaction();
+    try {
+      $affects = 0;
+      foreach($request->co_usuario as $co_usuario){
+        if($this->destroyUser($co_usuario)){
+          $affects++;
+        }
+      }
+      DB::commit();
+      if($affects > 0){
+        $request->session()->flash('success',trans_choice('messages.destroy',$affects));
+      }
+      return redirect()->route('usuarios.index');
+    } catch(CustomException $e) {
+      DB::rollBack();
+			return redirect()->back()
+				->with($e->getTypeMessage(), $e->getMessage());
+    }
+  }
+
+  private function destroyUser($co_usuario)
+  {
+    $objUsuario = TbUsuario::findOrFail($co_usuario);
+    if(auth()->user()->co_seq_usuario == $co_usuario){
+      request()->session()->flash('warning', "Não é possível excluir o usuário '{$objUsuario->ds_nome}', pois o mesmo está logado no sistema.");
+      return false;
+    }
+    return $objUsuario->forceDelete(); // Or ->delete() for the softdelete
   }
 
   public function destroyImg($id)
