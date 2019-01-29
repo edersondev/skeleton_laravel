@@ -49,9 +49,10 @@ class UsuarioController extends Controller
           $query->where('tb_usuario.dt_inclusao','>=',convertDate($searchInput['dt_inclusao'],'Y-m-d') . ' 00:00:00');
           $query->where('tb_usuario.dt_inclusao','<=',convertDate($searchInput['dt_inclusao'],'Y-m-d') . ' 23:59:59');
         }
-        // if(!empty($searchInput['co_perfil'])){
-        //   $query->roles()->where('tb_perfil.co_seq_perfil',$searchInput['co_perfil']);
-        // }
+        if(!empty($searchInput['co_perfil'])){
+          $query->join('ta_model_perfis as mp','tb_usuario.co_seq_usuario','=','mp.model_id');
+          $query->where('mp.co_perfil',$searchInput['co_perfil']);
+        }
       })
       ->make(true);
   }
@@ -209,7 +210,7 @@ class UsuarioController extends Controller
       }
       DB::commit();
       if($affects > 0){
-        $request->session()->flash('success',trans_choice('messages.destroy',$affects));
+        $request->session()->flash('success',trans_choice('messages.destroy_list',$affects));
       }
       return redirect()->route('usuarios.index');
     } catch(CustomException $e) {

@@ -8,6 +8,7 @@ use App\Exceptions\CustomException;
 use App\Models\TbPerfil;
 use App\Models\TbPermissao;
 use Yajra\Datatables\Datatables;
+use App\Http\Requests\PerfilRequest;
 use DB;
 
 class PerfilController extends Controller
@@ -18,25 +19,17 @@ class PerfilController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index() {
-		$roles = TbPerfil::all();
-		return view('perfis.index')->with('roles', $roles);
+	public function index()
+	{
+		$permissions = TbPermissao::pluck('ds_nome','co_seq_permissao');
+		return view('perfis.index',compact('permissions'));
 	}
 
 	public function jsonLista()
   {
-    return Datatables::of(TbPerfil::query())->make(true);
+		$objPerfil = TbPerfil::query()->with('permissions');
+    return Datatables::of($objPerfil)->make(true);
   }
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create() {
-		$permissions = TbPermissao::all();
-		return view('perfis.create', ['permissions'=>$permissions]);
-	}
 
 	/**
 	 * Store a newly created resource in storage.
@@ -44,13 +37,8 @@ class PerfilController extends Controller
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
-	
-		$this->validate($request, [
-			'ds_nome'=>'required|unique:tb_perfil|max:15',
-			]
-		);
-
+	public function store(PerfilRequest $request)
+	{
 		DB::beginTransaction();
 		try{
 			$role = new TbPerfil();
@@ -70,19 +58,8 @@ class PerfilController extends Controller
 		} catch(CustomException $e) {
 			DB::rollBack();
 			return redirect()->back()
-				->with($e->getTypeMessage(), $e->getMessage())
-				->withInput();
+				->with($e->getTypeMessage(), $e->getMessage());
 		}
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id) {
-		return redirect('perfis');
 	}
 
 	/**
@@ -91,11 +68,10 @@ class PerfilController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($id) {
-		$role = TbPerfil::findOrFail($id);
-		$permissions = TbPermissao::all();
-		$perfil_permissoes = $role->permissions()->pluck('co_permissao')->toarray();
-		return view('perfis.create', compact('role', 'permissions','perfil_permissoes'));
+	public function edit($id)
+	{
+		$objPerfil = TbPerfil::findOrFail($id);
+		return response()->json(['perfil' => $objPerfil, 'permissoes' => $objPerfil->permissions()->pluck('co_permissao')]);
 	}
 
 	/**
@@ -105,12 +81,8 @@ class PerfilController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id)
+	public function update(PerfilRequest $request, $id)
 	{
-		$this->validate($request, [
-			"ds_nome'=>'required|max:10|unique:tb_perfil,ds_nome,{$id},co_seq_perfil",
-		]);
-
 		DB::beginTransaction();
 		try{
 			$role = TbPerfil::findOrFail($id);
@@ -136,8 +108,7 @@ class PerfilController extends Controller
 		} catch(CustomException $e) {
 			DB::rollBack();
 			return redirect()->back()
-				->with($e->getTypeMessage(), $e->getMessage())
-				->withInput();
+				->with($e->getTypeMessage(), $e->getMessage());
 		}
 	}
 
@@ -164,5 +135,41 @@ class PerfilController extends Controller
 				->with($e->getTypeMessage(), $e->getMessage())
 				->withInput();
 		}
+	}
+
+	public function destroyList(Request $request)
+	{
+		$request->validate([
+      'co_perfil' => 'required|array',
+      'co_perfil.*' => 'integer'
+		]);
+		DB::beginTransaction();
+    try {
+			$affects = 0;
+			foreach($request->co_perfil as $co_perfil){
+				if($this->destroyRole($co_perfil)){
+          $affects++;
+        }
+			}
+			DB::commit();
+			if($affects > 0){
+        $request->session()->flash('success',trans_choice('messages.destroy_list',$affects));
+      }
+			return redirect()->route('perfis.index');
+		} catch(CustomException $e) {
+      DB::rollBack();
+			return redirect()->back()
+				->with($e->getTypeMessage(), $e->getMessage());
+    }
+	}
+
+	public function destroyRole($co_perfil)
+	{
+		$objPerfil = TbPerfil::findOrFail($co_perfil);
+		if($objPerfil->ds_nome === 'Administrador'){
+			request()->session()->flash('warning', "O perfil 'Administrador' não pode ser excluido.");
+      return false;
+		}
+		return $objPerfil->delete();
 	}
 }

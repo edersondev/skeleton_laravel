@@ -1,12 +1,14 @@
 <!-- Modal -->
 @php
-  
   switch( isset($size) ? $size : null ){
     case 'large':
       $modalSize = ' modal-lg';
     break;
     case 'small':
       $modalSize = ' modal-sm';
+    break;
+    case 'extra-large':
+      $modalSize = ' modal-xl';
     break;
     default:
       $modalSize = '';

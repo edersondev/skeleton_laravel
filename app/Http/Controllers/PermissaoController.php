@@ -18,24 +18,15 @@ class PermissaoController extends Controller
 	* @return \Illuminate\Http\Response
 	*/
 	public function index() {
-		$permissions = TbPermissao::all();
-		return view('permissoes.index')->with('permissions', $permissions);
+		$perfis = TbPerfil::pluck('ds_nome','co_seq_perfil');
+		return view('permissoes.index',compact('perfis'));
 	}
 
 	public function jsonLista()
   {
-    return Datatables::of(TbPermissao::query())->make(true);
+		$objPermissao = TbPermissao::query()->with('roles');
+    return Datatables::of($objPermissao)->make(true);
   }
-
-	/**
-	* Show the form for creating a new resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
-	public function create() {
-		$roles = TbPerfil::get();
-		return view('permissoes.create')->with('roles', $roles);
-	}
 
 	/**
 	* Store a newly created resource in storage.
@@ -72,26 +63,15 @@ class PermissaoController extends Controller
 	}
 
 	/**
-	* Display the specified resource.
-	*
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function show($id) {
-		return redirect('permissoes');
-	}
-
-	/**
 	* Show the form for editing the specified resource.
 	*
 	* @param  int  $id
 	* @return \Illuminate\Http\Response
 	*/
-	public function edit($id) {
-		$permission = TbPermissao::findOrFail($id);
-		$roles = TbPerfil::get();
-		$permissoes_perfil = $permission->roles()->pluck('co_perfil')->toarray();
-		return view('permissoes.create', compact('permission','roles','permissoes_perfil'));
+	public function edit($id)
+	{
+		$objPermissao = TbPermissao::findOrFail($id);
+		return response()->json(['permissao' => $objPermissao, 'perfis' => $objPermissao->roles()->pluck('co_perfil')]);
 	}
 
 	/**
@@ -157,6 +137,31 @@ class PermissaoController extends Controller
 					->with($e->getTypeMessage(), $e->getMessage());
 			}
 		
+	}
+
+	public function destroyList(Request $request)
+	{
+		$request->validate([
+      'co_permissao' => 'required|array',
+      'co_permissao.*' => 'integer'
+		]);
+
+		DB::beginTransaction();
+    try {
+			$affects = 0;
+			foreach($request->co_permissao as $co_permissao){
+				$objPermissao = TbPermissao::findOrFail($co_permissao);
+				$objPermissao->delete();
+				$affects++;
+			}
+			DB::commit();
+			return redirect()->route('permissoes.index')
+				->with('success', trans_choice('messages.destroy_list',$affects));
+		} catch(CustomException $e) {
+      DB::rollBack();
+			return redirect()->back()
+				->with($e->getTypeMessage(), $e->getMessage());
+    }
 	}
 
 	private function validatePermissao($request)

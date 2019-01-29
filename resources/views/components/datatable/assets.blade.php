@@ -8,3 +8,15 @@
 	<script src="{{ URL::asset('js/datatables-plugins/cache/pipelining.js') }}"></script>
 	<script src="{{ URL::asset('components/jquery-dateFormat/jquery-dateformat.min.js') }}"></script>
 @endpush
+
+@push('js')
+<script>
+  $(function(){
+		$.extend( true, $.fn.dataTable.defaults, {
+			language: {
+        url: "{!! URL::asset('js/datatables-plugins/i18n/Portuguese-Brasil.json') !!}"
+      }
+		});
+	});
+</script>
+@endpush

@@ -71,3 +71,13 @@ table.dataTable.display tbody tr:hover.selected > .sorting_2, table.dataTable.or
 table.dataTable.display tbody tr:hover.selected > .sorting_3, table.dataTable.order-column.hover tbody tr:hover.selected > .sorting_3 {
   background-color: #a5b2cb;
 }
+
+@media (min-width: 1200px){
+  .modal-xl {
+    max-width: 1140px;
+  }
+}
+
+.icon-spacing{
+  padding-right: 5px;
+}

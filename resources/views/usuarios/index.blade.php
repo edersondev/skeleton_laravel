@@ -108,7 +108,7 @@
 {{ Form::close() }}
 
 @component('components/bootstrap/modal',['modal_id' => 'alert-selected'])
-Você precisa selecionar ao menos um registro.
+	{{ trans('messages.confirm_select') }}
 @endcomponent
 
 @endsection
@@ -134,18 +134,7 @@ Você precisa selecionar ao menos um registro.
 
 			var usersTable = $('#users-table').DataTable({
 				columns: [
-					{
-						data: 'co_seq_usuario',
-						searchable: false,
-						orderable: false,
-						class:'text-center',
-						width:'4%',
-						render: function(data,type,full,meta){
-							var element = $('<span>',{'class':'selected-row','title':'Selecionar registro'});
-							element.append($('<i>',{'class':'far fa-square'}));
-							return element.get(0).outerHTML;
-						}
-					},
+					{data: 'co_seq_usuario'},
 					{data: 'co_seq_usuario',width:"5%"},
 					{
 						data: 'ds_nome',
@@ -155,6 +144,7 @@ Você precisa selecionar ao menos um registro.
 								'title':`Editar Registro: ${data}`,
 								'text':data
 							});
+							linkElement.prepend($('<i>',{'class':'fas fa-edit icon-spacing'}));
 							return linkElement.get(0).outerHTML;
 						}
 					},
@@ -191,12 +181,6 @@ Você precisa selecionar ao menos um registro.
 					}
 					]
 				});
-
-			$('#users-table tbody').on( 'click', 'tr td span.selected-row', function () {
-				$(this).closest('tr').toggleClass('selected');
-				var iconClass = ( $(this).closest('tr').hasClass('selected') ? 'far fa-check-square' : 'far fa-square' );
-				$(this).children('i').attr('class',iconClass);
-			});
 
 			$('#btn-delete-rows').on('click',function(){
 				var selectRow = usersTable.rows('.selected').data()
