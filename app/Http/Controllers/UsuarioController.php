@@ -64,8 +64,8 @@ class UsuarioController extends Controller
   */
   public function create()
   {
-		$roles = TbPerfil::get();
-		return view('usuarios.create', ['roles'=>$roles]);
+		$perfis = TbPerfil::pluck('ds_nome','co_seq_perfil');
+		return view('usuarios.create', compact('perfis'));
   }
 
   /**
@@ -123,9 +123,8 @@ class UsuarioController extends Controller
   public function edit($id)
   {
     $user = TbUsuario::findOrFail($id);
-		$roles = TbPerfil::get();
-    $usuario_perfis = $user->roles()->pluck('co_perfil')->toarray();
-		return view('usuarios.create', compact('user', 'roles','usuario_perfis'));
+		$perfis = TbPerfil::pluck('ds_nome','co_seq_perfil');
+		return view('usuarios.create', compact('user', 'perfis'));
   }
 
   /**

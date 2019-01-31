@@ -202,6 +202,7 @@
 				usersTable.search(formData).draw();
 			});
 			$('#btClear').click(function(){
+				$(':input','#form_search').not(':button, :reset, :hidden').val('');
 				usersTable.search('').draw();
 				$('#search_form').collapse('hide');
 			});

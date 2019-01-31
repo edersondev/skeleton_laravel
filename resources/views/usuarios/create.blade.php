@@ -2,6 +2,11 @@
 
 @push('css')
 	<link rel="stylesheet" href="{{ URL::asset('components/titatoggle/titatoggle-dist-min.css') }}">
+	<link rel="stylesheet" href="{{ URL::asset('components/bootstrap4c-chosen/css/component-chosen.min.css') }}">
+@endpush
+
+@push('js')
+	<script src="{{ URL::asset('components/chosen/chosen.jquery.min.js') }}"></script>
 @endpush
 
 @section('title')
@@ -20,6 +25,16 @@
 @endif
 
 	<div class="card">
+		@if(Route::currentRouteName() === 'usuarios.edit')
+		<div class="card-header">
+			<div class="float-right">
+				<button type="button" class="btn btn-danger" id="btn-delete">
+					<i class="fas fa-trash-alt"></i> Deletar
+				</button>
+			</div>
+		</div>
+		@endif
+
 		<div class="card-body">
 
 			<div class="row">
@@ -59,36 +74,15 @@
 								@endif
 
 								{{ Form::bsFile('img_profile','Imagem do Perfil') }}
+
+								{{ Form::bsSelect('roles','Perfis',$perfis,null,null,['name'=>'roles[]','class'=>'form-control select-chosen','multiple'=>true]) }}
 								
 								{{ Form::bsTitaCheckbox('st_ativo','Usuário ativo?',1,( isset($user->st_ativo) ? $user->st_ativo : 0 )) }}
 							</div>
 						</div>
 
 				</div>
-				<div class="col-md">
-
-					<div class="card">
-						<div class="card-header">
-							<i class="fas fa-key"></i> Atribuir Perfil
-						</div>
-						<div class="card-body">
-								@if(count($roles))
-									@foreach ($roles as $role)
-										@php
-											$checked = null;
-											if(Route::currentRouteName() === 'usuarios.edit'){
-												$checked = ( in_array($role->co_seq_perfil,$usuario_perfis) ? true : false );
-											}
-										@endphp
-										{{ Form::bsCheckbox('roles[]',ucfirst($role->ds_nome),$role->co_seq_perfil, $checked,['id' => "item_" . $loop->iteration]) }}
-									@endforeach
-								@else
-									<h5><b>Nenhum perfil cadastrado</b></h5>
-								@endif
-						</div>
-					</div>
-
-				</div>
+				
 			</div>
 
 		</div>
@@ -100,6 +94,11 @@
 		
 	</div>
 {{ Form::close() }}
+
+@if(Route::currentRouteName() === 'usuarios.edit')
+{{ Form::open(['route' => ['usuarios.destroy',$user->co_seq_usuario],'id' => 'deletar','method' => 'DELETE']) }}
+{{ Form::close() }}
+@endif
 
 @if( Route::currentRouteName() === 'usuarios.edit' && !is_null($user->img_profile) )
 	@component('components.bootstrap.modal',['title'=>'Zoom','modal_id'=>'zoom_image','size'=>'large'])
@@ -114,3 +113,16 @@
 @endif
 
 @endsection
+
+@component('components/chosen/default')
+@endcomponent
+
+@push('js')
+	<script>
+		$(function(){
+			$('#btn-delete').click(function(){
+				$('#deletar').submit();
+			});
+		});
+	</script>
+@endpush

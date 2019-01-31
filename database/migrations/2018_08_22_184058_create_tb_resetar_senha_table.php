@@ -8,9 +8,9 @@ class CreateTbResetarSenhaTable extends Migration {
 	public function up()
 	{
 		Schema::create('tb_resetar_senha', function(Blueprint $table) {
-			$table->string('ds_email');
-			$table->string('ds_token');
-			$table->timestamp('dt_inclusao')->nullable();
+			$table->string('email');
+			$table->string('token');
+			$table->timestamp('created_at')->nullable();
 		});
 	}
 

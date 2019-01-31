@@ -29,6 +29,7 @@
       </div>
       <div class="card">
         <div class="card-body login-card-body">
+          @include('layouts.alerts')
           @yield('content')
         </div>
         <!-- /.login-card-body -->
