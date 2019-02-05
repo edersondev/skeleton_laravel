@@ -17,16 +17,9 @@ class Admin
 	 */
 	public function handle($request, Closure $next)
 	{
-		// try{
-		// 	dd(auth()->user()->hasPermissionTo('Qualquer ação'));
-		// }catch(\Exception $e){
-		// 	abort('404',$e->getMessage());
-		// }
-
 		if( !auth()->user()->hasRole('Administrador') ) {
-			abort('401');
+			abort('403');
 		}
-
 		return $next($request);
 	}
 }

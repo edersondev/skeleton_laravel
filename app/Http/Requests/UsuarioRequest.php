@@ -28,7 +28,9 @@ class UsuarioRequest extends FormRequest
     $rules = [
       'ds_nome'=>'required|max:120',
       'email'=>'required|email|unique:tb_usuario',
-      'password' => 'required|min:6|confirmed'
+			'password' => 'required|min:6|confirmed',
+			'img_profile' => 'image|nullable',
+			'roles' => 'array|nullable'
     ];
 
     // Se formulário for de editar muda a regra de validação
