@@ -29,15 +29,7 @@ class AutenticacaoTest extends TestCase
   /** @test */
   public function check_login()
   {
-    $this->post(route('login'),['email'=>$this->user->email,'password'=>'123456'])
-      ->assertSessionHasNoErrors()
-      ->assertRedirect(route('default'));
-  }
-
-  /** @test */
-  public function falha_no_login()
-  {
-    $this->post(route('login'),['email' => 'email@qualquer.com.br','password' => '123456'])
-      ->assertSessionHasErrors();
+    $this->assertCredentials(['email'=>$this->user->email,'password'=>'123456']);
+    $this->assertInvalidCredentials(['email' => 'email@qualquer.com.br','password' => '123456']);
   }
 }
