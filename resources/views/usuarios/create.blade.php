@@ -21,7 +21,7 @@
 @if( Route::currentRouteName() === 'usuarios.create' )
 	{{ Form::open(['route' => 'usuarios.store', 'files' => true]) }}
 @else
-	{{ Form::model($user, ['route' => array('usuarios.update', $user->co_seq_usuario), 'method' => 'PUT', 'files' => true]) }}
+	{{ Form::model($user, ['route' => ['usuarios.update', $user->co_seq_usuario], 'method' => 'PUT', 'files' => true]) }}
 @endif
 
 	<div class="card">

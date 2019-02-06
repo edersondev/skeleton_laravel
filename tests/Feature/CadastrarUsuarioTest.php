@@ -20,6 +20,13 @@ class CadastrarUsuarioTest extends TestCase
     'password_confirmation' => '123456',
     'st_ativo' => 1
   ];
+
+  /** @test */
+  public function nao_autenticado_criar_usuario()
+  {
+    $this->post(route('usuarios.store'),[])
+     ->assertStatus(302);
+  }
   
   /** @test */
   public function usuario_pode_acessar_lista_usuarios()

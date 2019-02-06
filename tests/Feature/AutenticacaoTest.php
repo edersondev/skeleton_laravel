@@ -33,4 +33,11 @@ class AutenticacaoTest extends TestCase
       ->assertSessionHasNoErrors()
       ->assertRedirect(route('default'));
   }
+
+  /** @test */
+  public function falha_no_login()
+  {
+    $this->post(route('login'),['email' => 'email@qualquer.com.br','password' => '123456'])
+      ->assertSessionHasErrors();
+  }
 }
