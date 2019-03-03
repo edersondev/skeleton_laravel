@@ -12,7 +12,7 @@ abstract class TestCase extends BaseTestCase
   public $userAdmin;
   public $coPerfilAdmin;
 
-  protected function setUp()
+  protected function setUp(): void
   {
     parent::setUp();
     $this->user = factory('App\Models\TbUsuario')->create();
